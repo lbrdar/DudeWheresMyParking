@@ -1,4 +1,4 @@
-# Dude, where's my parking? ![logo](https://github.com/lbrdar/DudeWheresMyParking/tree/master/app/images/logo.png "Dude, where's my parking?")
+# Dude, where's my parking? ![](app/images/logo.png "Dude, where's my parking?")
 
 Mobile application for easier parking spot finding.
 Find free parking spots near you or near any other place you want.
