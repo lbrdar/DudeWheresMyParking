@@ -1,5 +1,5 @@
 import MainScreen from './MainComponent';
 
 export {
-  MainScreen
+  MainScreen as default
 };

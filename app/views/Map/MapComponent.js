@@ -1,4 +1,5 @@
-import React from 'react'
+/* eslint-disable no-console, no-undef */
+import React, { PropTypes } from 'react'
 import {
   View
 } from 'react-native'
@@ -9,7 +10,15 @@ import styles from './MapStyle';
 
 class MapScreen extends React.Component {
 
-  static navigationOptions = { title: 'Map', };
+  static navigationOptions = {
+    title: 'Map',
+  };
+
+  static propTypes = {
+    navigation: PropTypes.shape({ // eslint-disable-line
+      navigate: PropTypes.func
+    }).isRequired
+  };
 
   constructor(props) {
     super(props);
@@ -24,7 +33,7 @@ class MapScreen extends React.Component {
   }
 
   componentWillMount() {
-    this.watchID = navigator.geolocation.watchPosition(   // eslint-disable-line no-undef
+    this.watchID = navigator.geolocation.watchPosition(
       ({ coords }) => {
         this.setState({ latitude: coords.latitude, longitude: coords.longitude });
         console.log('Updated user position!');
@@ -56,7 +65,7 @@ class MapScreen extends React.Component {
   };
 
   render() {
-    const { navigate } = this.props.navigation;
+    // const { navigate } = this.props.navigation;
     console.log(this.props);
 
     return (

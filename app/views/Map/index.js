@@ -1,5 +1,5 @@
 import MapScreen from './MapComponent';
 
 export {
-  MapScreen
+  MapScreen as default
 };
