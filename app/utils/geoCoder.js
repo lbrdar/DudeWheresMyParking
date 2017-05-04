@@ -1,7 +1,7 @@
 import config from '../config';
 
 const googleApiUrl = 'https://maps.google.com/maps/api/geocode/json';
-const apiKey = config.apiKey;
+const apiKey = config.googleAPIKey;
 
 const geoCoder = {
 
