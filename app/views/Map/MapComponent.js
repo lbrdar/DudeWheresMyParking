@@ -10,16 +10,6 @@ import styles from './MapStyle';
 
 class MapScreen extends React.Component {
 
-  static navigationOptions = {
-    title: 'Map',
-  };
-
-  static propTypes = {
-    navigation: PropTypes.shape({ // eslint-disable-line
-      navigate: PropTypes.func
-    }).isRequired
-  };
-
   constructor(props) {
     super(props);
 
@@ -89,5 +79,11 @@ class MapScreen extends React.Component {
     );
   }
 }
+
+MapScreen.propTypes = {
+  navigation: PropTypes.shape({ // eslint-disable-line
+    navigate: PropTypes.func
+  }).isRequired
+};
 
 export default MapScreen;
