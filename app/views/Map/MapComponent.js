@@ -4,7 +4,7 @@ import {
   View
 } from 'react-native'
 import MapView from 'react-native-maps';
-import geoLocationUtils from '../../utils';
+import { geoLocationUtils } from '../../utils';
 import styles from './MapStyle';
 
 
@@ -37,6 +37,12 @@ class MapScreen extends React.Component {
     navigator.geolocation.clearWatch(this.watchID);
   }
 
+  getRegion = () => {
+    const { latitude, longitude, radius } = this.state;
+    const circleBounds = geoLocationUtils.getCircleBounds({ latitude, longitude }, radius);
+
+    return geoLocationUtils.calculateDelta([ ...circleBounds ], { latitude, longitude });
+  };
 
   calculateIfNearUser = (node) => {
     const userLocation = {
@@ -54,6 +60,7 @@ class MapScreen extends React.Component {
 
   };
 
+
   render() {
     // const { navigate } = this.props.navigation;
     console.log(this.props);
@@ -62,16 +69,13 @@ class MapScreen extends React.Component {
       <View style={styles.container}>
         <MapView
           style={styles.map}
-          region={{
-            latitude: this.state.latitude,
-            longitude: this.state.longitude,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
-          }}
+          region={this.getRegion()}
         >
           <MapView.Circle
             center={{ latitude: this.state.latitude, longitude: this.state.longitude }}
             radius={this.state.radius}
+            fillColor="rgba(76,175,80, 0.25)"
+            strokeColor="rgb(76,175,80)"
           />
         </MapView>
       </View>
