@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { Text } from 'react-native';
-import Container from '../../common/Container';
+import { Container } from '../../common';
 
 
 class Settings extends Component {  // eslint-disable-line react/prefer-stateless-function

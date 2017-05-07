@@ -9,4 +9,15 @@ export default StyleSheet.create({
   map: {
     ...StyleSheet.absoluteFillObject,
   },
+  dialogContainer: {
+    ...StyleSheet.absoluteFillObject,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  dialogContent: {
+    paddingHorizontal: 4,
+  },
+  dialogActionsContainer: {
+    flexDirection: 'row'
+  }
 });

@@ -5,15 +5,9 @@ import Settings from '../views/Settings';
 export default {
   Main: {
     screen: Home,
-    navigationOptions: () => ({
-      title: 'Welcome',
-    }),
   },
   Map: {
     screen: Map,
-    navigationOptions: () => ({
-      title: 'Map'
-    }),
   },
   Settings: {
     screen: Settings,

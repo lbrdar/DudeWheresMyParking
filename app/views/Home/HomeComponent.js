@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
-import Container from '../../common/Container';
-import Button from '../../common/Button';
+import { Toolbar } from 'react-native-material-ui';
+import { Container, Button } from '../../common';
 import styles from './HomeStyle';
 
 
@@ -24,6 +24,10 @@ class Home extends Component {  // eslint-disable-line react/prefer-stateless-fu
     );
   }
 }
+
+Home.navigationOptions = () => ({
+  header: <Toolbar centerElement="Welcome" />
+});
 
 Home.propTypes = {
   navigation: PropTypes.shape({

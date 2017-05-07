@@ -1,14 +1,8 @@
 import React, { Component } from 'react';
-import { COLOR, ThemeProvider } from 'react-native-material-ui';
+import {  ThemeProvider } from 'react-native-material-ui';
 import { StackNavigator } from 'react-navigation';
+import { myTheme } from '../../common';
 import routes from '../../routes';
-
-const uiTheme = {
-  palette: {
-    primaryColor: COLOR.green500,
-    accentColor: COLOR.pink500,
-  },
-};
 
 const AppNavigator = StackNavigator(routes);
 
@@ -16,7 +10,7 @@ class App extends Component {  // eslint-disable-line react/prefer-stateless-fun
 
   render() {
     return (
-      <ThemeProvider uiTheme={uiTheme}>
+      <ThemeProvider uiTheme={myTheme}>
         <AppNavigator />
       </ThemeProvider>
     );
