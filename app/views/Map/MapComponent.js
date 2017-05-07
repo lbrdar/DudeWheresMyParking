@@ -5,6 +5,8 @@ import {
 } from 'react-native'
 import MapView from 'react-native-maps';
 import { geoLocationUtils } from '../../utils';
+import MapHeaderOptions from './MapHeaderOptions';
+import Loading from '../../common/Loading';
 import styles from './MapStyle';
 
 
@@ -15,17 +17,22 @@ class MapScreen extends React.Component {
 
     this.state = {
       radius: 300, // meters
-      latitude: 42.877742, // Center of USA
-      longitude: -97.380979, // Center of USA
+      latitude: null,
+      longitude: null,
+      loading: true
     };
 
     this.watchID = null;
   }
 
   componentWillMount() {
+    this.props.navigation.setParams({ onRefresh: this.onRefresh });
+  }
+
+  componentDidMount() {
     this.watchID = navigator.geolocation.watchPosition(
       ({ coords }) => {
-        this.setState({ latitude: coords.latitude, longitude: coords.longitude });
+        this.setState({ latitude: coords.latitude, longitude: coords.longitude, loading: false });
         console.log('Updated user position!');
       },
       err => console.log('Error in navigator: ', err),    // TODO: add denied location handling
@@ -36,6 +43,20 @@ class MapScreen extends React.Component {
   componentWillUnmount() {
     navigator.geolocation.clearWatch(this.watchID);
   }
+
+  onRefresh = () => {
+    this.setState({ loading: true });
+    console.log('Loading new')
+
+    navigator.geolocation.getCurrentPosition(
+      ({ coords }) => {
+        this.setState({ latitude: coords.latitude, longitude: coords.longitude, loading: false });
+        console.log('Updated user position!');
+      },
+      err => console.log('Error in navigator: ', err),    // TODO: add denied location handling
+      { enableHighAccuracy: true }
+    );
+  };
 
   getRegion = () => {
     const { latitude, longitude, radius } = this.state;
@@ -62,8 +83,9 @@ class MapScreen extends React.Component {
 
 
   render() {
-    // const { navigate } = this.props.navigation;
-    console.log(this.props);
+    if (this.state.loading) {
+      return <Loading />
+    }
 
     return (
       <View style={styles.container}>
@@ -84,9 +106,14 @@ class MapScreen extends React.Component {
   }
 }
 
+MapScreen.navigationOptions = ({ navigation }) => ({
+  headerRight: <MapHeaderOptions refresh={navigation.state.params && navigation.state.params.onRefresh} />
+});
+
 MapScreen.propTypes = {
   navigation: PropTypes.shape({ // eslint-disable-line
-    navigate: PropTypes.func
+    navigate: PropTypes.func,
+    setParams: PropTypes.func
   }).isRequired
 };
 
