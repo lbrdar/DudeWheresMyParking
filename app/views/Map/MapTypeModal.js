@@ -55,13 +55,6 @@ class MapTypeModal extends React.Component {  // eslint-disable-line react/prefe
               value="hybrid"
               onPress={selected => this.setState({ selected })}
             />
-            <Divider />
-            <RadioButton
-              label="Terrain"
-              checked={selected === 'terrain'}
-              value="terrain"
-              onPress={selected => this.setState({ selected })}
-            />
           </View>
         </Dialog.Content>
         <Dialog.Actions>
