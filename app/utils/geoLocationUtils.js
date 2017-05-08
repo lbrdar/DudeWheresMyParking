@@ -36,8 +36,8 @@ const GeoLocation = {
     const midX = (minX + maxX) / 2;
     const midY = (minY + maxY) / 2;
 
-    const deltaX = (maxX - minX) + .075;
-    const deltaY = (maxY - minY) + .075;
+    const deltaX = (maxX - minX) + 0.01;
+    const deltaY = (maxY - minY) + 0.01;
 
     return { latitude: midX, longitude: midY, latitudeDelta: deltaX, longitudeDelta: deltaY };
   },
