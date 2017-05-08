@@ -23,7 +23,7 @@ class MapTypeModal extends React.Component {  // eslint-disable-line react/prefe
 
   handleModalActions = (actionName) => {
     if (actionName === 'OK') {
-      this.props.changeType();
+      this.props.changeType(this.state.selected);
     }
     this.props.navigation.setParams({ openTypeModal: false });
   };
