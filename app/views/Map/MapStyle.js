@@ -9,6 +9,15 @@ export default StyleSheet.create({
   map: {
     ...StyleSheet.absoluteFillObject,
   },
+  markerWindow: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  markerCallout: {
+    backgroundColor: 'white',
+    justifyContent: 'center',
+    alignItems: 'flex-start'
+  },
   dialogContainer: {
     ...StyleSheet.absoluteFillObject,
     justifyContent: 'center',
