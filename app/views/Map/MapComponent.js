@@ -3,7 +3,7 @@ import React, { PropTypes } from 'react'
 import { View, Text } from 'react-native'
 import MapView from 'react-native-maps';
 import moment from 'moment';
-import { geoLocationUtils, getAllParkingSpots, getParkingSpot } from '../../utils';
+import { geoLocationUtils, API } from '../../utils';
 import { Loading } from '../../common';
 import MapTypeModal from './MapTypeModal';
 import MapHeader from './MapHeader';
@@ -17,8 +17,17 @@ class Map extends React.Component {
 
     this.state = {
       radius: 300, // meters
-      latitude: null,
-      longitude: null,
+      userPosition: {
+        latitude: null,
+        longitude: null
+      },
+      region: {
+        latitude: null,
+        longitude: null,
+        latitudeDelta: null,
+        longitudeDelta: null
+      },
+      isInitialRendering: true,
       loading: true,
       mapType: 'standard',
       parkingSpots: [],
@@ -30,64 +39,61 @@ class Map extends React.Component {
   }
 
   componentWillMount() {
-    getAllParkingSpots()
-      .then(parkingSpots => this.setState({ parkingSpots }))
+    API.getAllParkingSpots()
+      .then(parkingSpots => ( parkingSpots && this.setState({ parkingSpots }) ))
       .catch(err => console.log('Failed to retrieve parking spots. ', err));
     this.props.navigation.setParams({ onRefresh: this.onRefresh });
   }
-
   componentDidMount() {
     this.watchID = navigator.geolocation.watchPosition(
-      ({ coords }) => {
-        this.setState({ latitude: coords.latitude, longitude: coords.longitude, loading: false });
-        console.log('Updated user position!');
-      },
+      this.updateUserPosition,
       err => console.log('Error in navigator: ', err),    // TODO: add denied location handling
       { enableHighAccuracy: true, distanceFilter: 1 }
     );
   }
-
   componentWillUnmount() {
     navigator.geolocation.clearWatch(this.watchID);
   }
 
   onRefresh = () => {
     this.setState({ loading: true });
-    console.log('Loading new')
-
     navigator.geolocation.getCurrentPosition(
-      ({ coords }) => {
-        this.setState({ latitude: coords.latitude, longitude: coords.longitude, loading: false });
-        console.log('Updated user position!');
-      },
+      this.updateUserPosition,
       err => console.log('Error in navigator: ', err),    // TODO: add denied location handling
       { enableHighAccuracy: true }
     );
   };
 
-  onMapTypeChange = (newType) => {
-    this.setState({ mapType: newType });
-  };
-
+  onRegionChangeComplete = region => this.setState({ region });
+  onMapTypeChange = mapType => this.setState({ mapType });
   onMarkerPress = (id) => {
     this.setState({ activeMarker: id, selectedParkingSpot: null }); // override previously selected
-    getParkingSpot(id)
+    API.getParkingSpot(id)
       .then(data => this.setState({ selectedParkingSpot: data }))
       .catch(err => console.log('Failed to retrieve parking spot. ', err));
   };
-
   onCalloutPress = () => {
     this.setState({ activeMarker: null, selectedParkingSpot: null });
   };
 
-  getRegion = () => {
-    const { latitude, longitude, radius } = this.state;
+  getRegion = (latitude, longitude, radius) => {
     const circleBounds = geoLocationUtils.getCircleBounds({ latitude, longitude }, radius);
 
     return geoLocationUtils.calculateDelta([...circleBounds], { latitude, longitude });
   };
+  updateUserPosition = ({ coords: { latitude, longitude } }) => {
+    // center map to fit user's circle only the first time user position is retrieved
+    const region = this.state.isInitialRendering ? this.getRegion(latitude, longitude, this.state.radius) : this.state.region;
+    this.setState({
+      region,
+      userPosition: { latitude, longitude },
+      loading: false,
+      isInitialRendering: false
+    });
+    console.log('Updated user position!');
+  };
 
-  calculateIfNearUser = (node) => {
+  calculateIfNearUser = (node) => { // FIXME: should be on api
     const userLocation = {
       radLat: geoLocationUtils.degreeToRadian(this.state.latitude),
       radLon: geoLocationUtils.degreeToRadian(this.state.longitude),
@@ -116,7 +122,6 @@ class Map extends React.Component {
       </View>
     );
   };
-
   renderMarker = ({ id, latitude, longitude }) => {
     const { selectedParkingSpot, activeMarker } = this.state;
     return (
@@ -131,9 +136,8 @@ class Map extends React.Component {
       </MapView.Marker>
     )
   };
-
   render() {
-    const { loading, latitude, longitude, radius, mapType, parkingSpots } = this.state;
+    const { loading, region, userPosition: { latitude, longitude }, radius, mapType, parkingSpots } = this.state;
     const { params } = this.props.navigation.state;
 
     if (loading) return <Loading />;
@@ -143,9 +147,10 @@ class Map extends React.Component {
         <MapView
           mapType={mapType}
           style={styles.map}
-          region={this.getRegion()}
+          region={region}
           showsUserLocation
           showsMyLocationButton
+          onRegionChangeComplete={this.onRegionChangeComplete}
         >
           <MapView.Circle
             center={{ latitude, longitude }}
