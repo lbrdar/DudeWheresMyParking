@@ -29,7 +29,7 @@ async function createParkingSpot(parkingSpot) {
 }
 
 
-module.exports = {
+export default {
   getAllParkingSpots,
   getParkingSpot,
   createParkingSpot
