@@ -26,13 +26,13 @@ class MapHeader extends React.Component { // eslint-disable-line react/prefer-st
   };
 
   render() {
-    const { navigation: { state, goBack } } = this.props;
+    const { navigation: { state, goBack, navigate } } = this.props;
 
     return (
       <Toolbar
         centerElement="Map"
         leftElement="arrow-back"
-        onLeftElementPress={() => goBack()}
+        onLeftElementPress={goBack}
         rightElement={{
           actions: [
             <IconToggle
@@ -41,6 +41,13 @@ class MapHeader extends React.Component { // eslint-disable-line react/prefer-st
               key="refresh"
               name="refresh"
               onPress={state.params && state.params.onRefresh}
+            />,
+            <IconToggle
+              color="white"
+              underlayColor={COLOR.grey400}
+              key="search"
+              name="search"
+              onPress={() => navigate('PlacesSearch')}
             />
             ],
           menu: {
@@ -55,7 +62,10 @@ class MapHeader extends React.Component { // eslint-disable-line react/prefer-st
 
 MapHeader.propTypes = {
   navigation: PropTypes.shape({
-    state: PropTypes.shape({}),
+    state: PropTypes.shape({
+      params: PropTypes.shape({})
+    }),
+    navigate: PropTypes.func,
     goBack: PropTypes.func,
     setParams: PropTypes.func
   }).isRequired
