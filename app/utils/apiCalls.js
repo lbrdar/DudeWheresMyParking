@@ -8,6 +8,12 @@ async function getAllParkingSpots() {
     .catch(err => console.log('Error in get all parking spots: ', err));
 }
 
+async function getParkingSpotsNear(location, radius) {
+  return fetch(`${config.APIserver}/parking_spots/near?latitude=${location.latitude}&longitude=${location.longitude}&radius=${radius}`)
+    .then(res => res.json())
+    .catch(err => console.log('Error in get parking spots near location: ', err));
+}
+
 async function getParkingSpot(id) {
   return fetch(`${config.APIserver}/parking_spots/${id}`)
     .then(res => res.json())
@@ -31,6 +37,7 @@ async function createParkingSpot(parkingSpot) {
 
 export default {
   getAllParkingSpots,
+  getParkingSpotsNear,
   getParkingSpot,
   createParkingSpot
 };

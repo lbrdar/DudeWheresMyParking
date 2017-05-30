@@ -47,7 +47,10 @@ class MapHeader extends React.Component { // eslint-disable-line react/prefer-st
               underlayColor={COLOR.grey400}
               key="search"
               name="search"
-              onPress={() => navigate('PlacesSearch')}
+              onPress={() => navigate('PlacesSearch', {
+                userPosition: state.params && state.params.userPosition,
+                onPlaceSelect:  state.params && state.params.onPlaceSelect })
+              }
             />
             ],
           menu: {

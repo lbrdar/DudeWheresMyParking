@@ -27,6 +27,11 @@ class Map extends React.Component {
         latitudeDelta: null,
         longitudeDelta: null
       },
+      parkingFindingLocation: {
+        latitude: null,
+        longitude: null
+      },
+      findParkingNearUser: true,
       isInitialRendering: true,
       loading: true,
       mapType: 'standard',
@@ -39,10 +44,7 @@ class Map extends React.Component {
   }
 
   componentWillMount() {
-    API.getAllParkingSpots()
-      .then(parkingSpots => ( parkingSpots && this.setState({ parkingSpots }) ))
-      .catch(err => console.log('Failed to retrieve parking spots. ', err));
-    this.props.navigation.setParams({ onRefresh: this.onRefresh });
+    this.props.navigation.setParams({ onRefresh: this.onRefresh, onPlaceSelect: this.onPlaceSelect });
   }
   componentDidMount() {
     this.watchID = navigator.geolocation.watchPosition(
@@ -62,6 +64,18 @@ class Map extends React.Component {
       err => console.log('Error in navigator: ', err),    // TODO: add denied location handling
       { enableHighAccuracy: true }
     );
+
+    if (!this.state.findParkingNearUser) {  // if it's true, it will be handled when new userPosition is received in updateUserPosition
+      this.getParkingSpots(this.state.parkingFindingLocation);
+    }
+  };
+
+  onPlaceSelect = ({ latitude, longitude }) => {
+    this.setState({
+      region: this.getRegion(latitude, longitude, this.state.radius),
+      parkingFindingLocation: { latitude, longitude },
+      findParkingNearUser: false
+    })
   };
 
   onRegionChangeComplete = region => this.setState({ region });
@@ -72,16 +86,26 @@ class Map extends React.Component {
       .then(data => this.setState({ selectedParkingSpot: data }))
       .catch(err => console.log('Failed to retrieve parking spot. ', err));
   };
-  onCalloutPress = () => {
-    this.setState({ activeMarker: null, selectedParkingSpot: null });
-  };
+  onCalloutPress = () => this.setState({ activeMarker: null, selectedParkingSpot: null });
 
+
+  getParkingSpots = (location) => {
+    API.getParkingSpotsNear(location, this.state.radius)
+       .then(parkingSpots => ( parkingSpots && this.setState({ parkingSpots }) ))
+       .catch(err => console.log('Failed to retrieve parking spots. ', err));
+  };
   getRegion = (latitude, longitude, radius) => {
     const circleBounds = geoLocationUtils.getCircleBounds({ latitude, longitude }, radius);
 
     return geoLocationUtils.calculateDelta([...circleBounds], { latitude, longitude });
   };
   updateUserPosition = ({ coords: { latitude, longitude } }) => {
+    this.props.navigation.setParams({ userPosition: { latitude, longitude } });
+    if (this.state.findParkingNearUser) {
+      this.getParkingSpots({latitude, longitude});
+      this.setState({ parkingFindingLocation: { latitude, longitude } });
+    }
+
     // center map to fit user's circle only the first time user position is retrieved
     const region = this.state.isInitialRendering ? this.getRegion(latitude, longitude, this.state.radius) : this.state.region;
     this.setState({
@@ -92,23 +116,6 @@ class Map extends React.Component {
     });
     console.log('Updated user position!');
   };
-
-  calculateIfNearUser = (node) => { // FIXME: should be on api
-    const userLocation = {
-      radLat: geoLocationUtils.degreeToRadian(this.state.latitude),
-      radLon: geoLocationUtils.degreeToRadian(this.state.longitude),
-    };
-    const parkingLocation = {
-      radLat: geoLocationUtils.degreeToRadian(node.latitude),
-      radLon: geoLocationUtils.degreeToRadian(node.longitude),
-    };
-
-    const distance = geoLocationUtils.distance(parkingLocation, userLocation);
-
-    return (distance * 1000 <= this.state.radius);
-
-  };
-
 
   renderMarkerCallout = () => {
     const { type, cost, taken, takenFor } = this.state.selectedParkingSpot;
