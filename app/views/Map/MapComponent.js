@@ -3,12 +3,23 @@ import React, { PropTypes } from 'react'
 import { View, Text } from 'react-native'
 import MapView from 'react-native-maps';
 import moment from 'moment';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import { geoLocationUtils, API } from '../../utils';
 import { Loading } from '../../common';
 import MapTypeModal from './MapTypeModal';
 import MapHeader from './MapHeader';
 import styles from './MapStyle';
+import * as Actions from '../../common/actions';
 
+function mapStateToProps(state) {
+  return {
+    drawer: state.drawerReducers
+  }
+}
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(Actions, dispatch);
+}
 
 class Map extends React.Component {
 
@@ -17,10 +28,6 @@ class Map extends React.Component {
 
     this.state = {
       radius: 300, // meters
-      userPosition: {
-        latitude: null,
-        longitude: null
-      },
       region: {
         latitude: null,
         longitude: null,
@@ -44,6 +51,7 @@ class Map extends React.Component {
   }
 
   componentWillMount() {
+    this.props.setNavigator(this.props.navigation);
     this.props.navigation.setParams({ onRefresh: this.onRefresh, onPlaceSelect: this.onPlaceSelect });
   }
   componentDidMount() {
@@ -100,7 +108,8 @@ class Map extends React.Component {
     return geoLocationUtils.calculateDelta([...circleBounds], { latitude, longitude });
   };
   updateUserPosition = ({ coords: { latitude, longitude } }) => {
-    this.props.navigation.setParams({ userPosition: { latitude, longitude } });
+    this.props.setUserPosition({ latitude, longitude });
+
     if (this.state.findParkingNearUser) {
       this.getParkingSpots({latitude, longitude});
       this.setState({ parkingFindingLocation: { latitude, longitude } });
@@ -110,11 +119,9 @@ class Map extends React.Component {
     const region = this.state.isInitialRendering ? this.getRegion(latitude, longitude, this.state.radius) : this.state.region;
     this.setState({
       region,
-      userPosition: { latitude, longitude },
       loading: false,
       isInitialRendering: false
     });
-    console.log('Updated user position!');
   };
 
   renderMarkerCallout = () => {
@@ -144,7 +151,7 @@ class Map extends React.Component {
     )
   };
   render() {
-    const { loading, region, userPosition: { latitude, longitude }, radius, mapType, parkingSpots } = this.state;
+    const { loading, region, radius, mapType, parkingSpots, parkingFindingLocation } = this.state;
     const { params } = this.props.navigation.state;
 
     if (loading) return <Loading />;
@@ -160,7 +167,7 @@ class Map extends React.Component {
           onRegionChangeComplete={this.onRegionChangeComplete}
         >
           <MapView.Circle
-            center={{ latitude, longitude }}
+            center={parkingFindingLocation}
             radius={radius}
             fillColor="rgba(76,175,80, 0.25)"
             strokeColor="rgb(76,175,80)"
@@ -191,7 +198,9 @@ Map.propTypes = {
     state: PropTypes.shape({
       params: PropTypes.shape({})
     })
-  }).isRequired
+  }).isRequired,
+  setNavigator: PropTypes.func.isRequired,
+  setUserPosition: PropTypes.func.isRequired
 };
 
-export default Map;
+export default connect(mapStateToProps, mapDispatchToProps)(Map);

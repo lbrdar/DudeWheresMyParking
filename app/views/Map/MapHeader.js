@@ -4,7 +4,18 @@ import {
   COLOR,
   Toolbar
 } from 'react-native-material-ui';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import * as Actions from '../../common/actions';
 
+function mapStateToProps(state) {
+  return {
+    drawer: state.drawerReducers
+  }
+}
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(Actions, dispatch);
+}
 
 class MapHeader extends React.Component { // eslint-disable-line react/prefer-stateless-function
   constructor() {
@@ -26,13 +37,12 @@ class MapHeader extends React.Component { // eslint-disable-line react/prefer-st
   };
 
   render() {
-    const { navigation: { state, goBack, navigate } } = this.props;
-
+    const { navigate, navigation: { state } } = this.props;
     return (
       <Toolbar
         centerElement="Map"
-        leftElement="arrow-back"
-        onLeftElementPress={goBack}
+        leftElement="menu"
+        onLeftElementPress={() => this.props.toggleDrawer()}
         rightElement={{
           actions: [
             <IconToggle
@@ -47,10 +57,7 @@ class MapHeader extends React.Component { // eslint-disable-line react/prefer-st
               underlayColor={COLOR.grey400}
               key="search"
               name="search"
-              onPress={() => navigate('PlacesSearch', {
-                userPosition: state.params && state.params.userPosition,
-                onPlaceSelect:  state.params && state.params.onPlaceSelect })
-              }
+              onPress={() => navigate('PlacesSearch', { onPlaceSelect:  state.params && state.params.onPlaceSelect })}
             />
             ],
           menu: {
@@ -63,6 +70,10 @@ class MapHeader extends React.Component { // eslint-disable-line react/prefer-st
   }
 }
 
+MapHeader.contextTypes = {
+  drawer: PropTypes.shape({})
+};
+
 MapHeader.propTypes = {
   navigation: PropTypes.shape({
     state: PropTypes.shape({
@@ -71,8 +82,9 @@ MapHeader.propTypes = {
     navigate: PropTypes.func,
     goBack: PropTypes.func,
     setParams: PropTypes.func
-  }).isRequired
+  }).isRequired,
+  navigate: PropTypes.func.isRequired,
+  toggleDrawer: PropTypes.func.isRequired
 };
 
-
-export default MapHeader;
+export default connect(mapStateToProps, mapDispatchToProps)(MapHeader);
