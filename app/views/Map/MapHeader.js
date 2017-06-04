@@ -31,9 +31,9 @@ class MapHeader extends React.Component { // eslint-disable-line react/prefer-st
             <IconToggle
               color="white"
               underlayColor={COLOR.grey400}
-              key="refresh"
-              name="refresh"
-              onPress={state.params && state.params.onRefresh}
+              key="add-location"
+              name="add-location"
+              onPress={() => navigate('AddParking')}
             />,
             <IconToggle
               color="white"
@@ -41,6 +41,13 @@ class MapHeader extends React.Component { // eslint-disable-line react/prefer-st
               key="search"
               name="search"
               onPress={() => navigate('PlacesSearch', { onPlaceSelect:  state.params && state.params.onPlaceSelect })}
+            />,
+            <IconToggle
+              color="white"
+              underlayColor={COLOR.grey400}
+              key="refresh"
+              name="refresh"
+              onPress={state.params && state.params.onRefresh}
             />
             ]
         }}
