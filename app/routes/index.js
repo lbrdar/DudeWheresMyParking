@@ -1,17 +1,17 @@
-import Home from '../views/Home';
 import Map from '../views/Map';
-import PlacesSearch from '../views/PlacesSearch'
+import PlacesSearch from '../views/PlacesSearch';
+import AddParking from '../views/AddParking';
 import Settings from '../views/Settings';
 
 export default {
-  Main: {
-    screen: Home,
-  },
   Map: {
     screen: Map,
   },
   PlacesSearch: {
     screen: PlacesSearch,
+  },
+  AddParking: {
+    screen: AddParking,
   },
   Settings: {
     screen: Settings,
