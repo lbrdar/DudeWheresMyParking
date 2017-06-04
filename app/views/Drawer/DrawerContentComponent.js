@@ -1,8 +1,10 @@
 import React, { Component, PropTypes } from 'react';
+import { Image } from 'react-native';
 import { Avatar, Drawer } from 'react-native-material-ui';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as Actions from '../../common/actions';
+import Logo from '../../images/logo.png';
 
 function mapStateToProps(state) {
   return {
@@ -30,7 +32,9 @@ class DrawerContentComponent extends Component {
     return (
       <Drawer>
         <Drawer.Header >
-          <Drawer.Header.Account avatar={<Avatar text={'P'} />} />
+          <Drawer.Header.Account
+            avatar={<Avatar image={<Image source={Logo} />} />}
+          />
         </Drawer.Header>
         <Drawer.Section
           divider
