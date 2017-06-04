@@ -22,7 +22,7 @@ class Settings extends Component {  // eslint-disable-line react/prefer-stateles
     this.state = {
       selectedType: props.settings.mapType,
       radius: props.settings.radius,
-      keyboardOpened: false
+      keyboardOpen: false
     }
   }
 
@@ -59,11 +59,11 @@ class Settings extends Component {  // eslint-disable-line react/prefer-stateles
   };
 
   render() {
-    const { selectedType, radius, keyboardOpened } = this.state;
+    const { selectedType, radius, keyboardOpen } = this.state;
     return (
       <KeyboardAvoidingView
         behavior='padding'
-        style={[styles.container, { justifyContent: keyboardOpened ? 'center' : 'flex-start' }]}
+        style={[styles.container, { justifyContent: keyboardOpen ? 'center' : 'flex-start' }]}
       >
         <View>
           <Text style={styles.name}>Map Type</Text>
@@ -104,8 +104,8 @@ class Settings extends Component {  // eslint-disable-line react/prefer-stateles
               maxLength={3}
               style={styles.radiusInput}
               value={radius.toString()}
-              onFocus={() => this.setState({ keyboardOpened: true })}
-              onBlur={() => this.setState({ keyboardOpened: false })}
+              onFocus={() => this.setState({ keyboardOpen: true })}
+              onBlur={() => this.setState({ keyboardOpen: false })}
               onChangeText={this.handleRadiusChange}
               onEndEditing={this.handleRadiusSet}
             />
