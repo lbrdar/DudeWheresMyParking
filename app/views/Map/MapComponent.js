@@ -7,13 +7,13 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { geoLocationUtils, API } from '../../utils';
 import { Loading } from '../../common';
-import MapTypeModal from './MapTypeModal';
 import MapHeader from './MapHeader';
 import styles from './MapStyle';
 import * as Actions from '../../common/actions';
 
 function mapStateToProps(state) {
   return {
+    settings: state.settingsReducers,
     drawer: state.drawerReducers
   }
 }
@@ -27,7 +27,6 @@ class Map extends React.Component {
     super(props);
 
     this.state = {
-      radius: 300, // meters
       region: {
         latitude: null,
         longitude: null,
@@ -41,7 +40,6 @@ class Map extends React.Component {
       findParkingNearUser: true,
       isInitialRendering: true,
       loading: true,
-      mapType: 'standard',
       parkingSpots: [],
       activeMarker: null,
       selectedParkingSpot: null
@@ -80,14 +78,13 @@ class Map extends React.Component {
 
   onPlaceSelect = ({ latitude, longitude }) => {
     this.setState({
-      region: this.getRegion(latitude, longitude, this.state.radius),
+      region: this.getRegion(latitude, longitude, this.props.settings.radius),
       parkingFindingLocation: { latitude, longitude },
       findParkingNearUser: false
     })
   };
 
   onRegionChangeComplete = region => this.setState({ region });
-  onMapTypeChange = mapType => this.setState({ mapType });
   onMarkerPress = (id) => {
     this.setState({ activeMarker: id, selectedParkingSpot: null }); // override previously selected
     API.getParkingSpot(id)
@@ -98,7 +95,7 @@ class Map extends React.Component {
 
 
   getParkingSpots = (location) => {
-    API.getParkingSpotsNear(location, this.state.radius)
+    API.getParkingSpotsNear(location, this.props.settings.radius)
        .then(parkingSpots => ( parkingSpots && this.setState({ parkingSpots }) ))
        .catch(err => console.log('Failed to retrieve parking spots. ', err));
   };
@@ -116,7 +113,7 @@ class Map extends React.Component {
     }
 
     // center map to fit user's circle only the first time user position is retrieved
-    const region = this.state.isInitialRendering ? this.getRegion(latitude, longitude, this.state.radius) : this.state.region;
+    const region = this.state.isInitialRendering ? this.getRegion(latitude, longitude, this.props.settings.radius) : this.state.region;
     this.setState({
       region,
       loading: false,
@@ -151,8 +148,8 @@ class Map extends React.Component {
     )
   };
   render() {
-    const { loading, region, radius, mapType, parkingSpots, parkingFindingLocation } = this.state;
-    const { params } = this.props.navigation.state;
+    const { loading, region, parkingSpots, parkingFindingLocation } = this.state;
+    const { settings: { radius, mapType } } = this.props;
 
     if (loading) return <Loading />;
 
@@ -174,13 +171,6 @@ class Map extends React.Component {
           />
           { parkingSpots.length ? parkingSpots.map(this.renderMarker) : null }
         </MapView>
-
-        { params && params.openTypeModal ?
-          <View style={styles.dialogContainer}>
-            <MapTypeModal navigation={this.props.navigation} changeType={this.onMapTypeChange} selectedType={mapType} />
-          </View>
-          : null
-        }
       </View>
 
     );
@@ -192,12 +182,13 @@ Map.navigationOptions = ({ navigation }) => ({
 });
 
 Map.propTypes = {
+  settings: PropTypes.shape({
+    radius: PropTypes.number.isRequired,
+    mapType: PropTypes.string.isRequired
+  }).isRequired,
   navigation: PropTypes.shape({ // eslint-disable-line
     navigate: PropTypes.func,
-    setParams: PropTypes.func,
-    state: PropTypes.shape({
-      params: PropTypes.shape({})
-    })
+    setParams: PropTypes.func
   }).isRequired,
   setNavigator: PropTypes.func.isRequired,
   setUserPosition: PropTypes.func.isRequired

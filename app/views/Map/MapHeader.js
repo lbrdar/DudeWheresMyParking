@@ -18,23 +18,6 @@ function mapDispatchToProps(dispatch) {
 }
 
 class MapHeader extends React.Component { // eslint-disable-line react/prefer-stateless-function
-  constructor() {
-    super();
-
-    this.menuOptions = [ 'Change map type' ];
-  }
-
-  handleMenuSelect = (e) => {
-      if(e.action === 'menu') {
-        switch (e.index) {
-          case 0:
-            this.props.navigation.setParams({ openTypeModal: true });
-            break;
-          default:
-            break;
-        }
-      }
-  };
 
   render() {
     const { navigate, navigation: { state } } = this.props;
@@ -59,12 +42,8 @@ class MapHeader extends React.Component { // eslint-disable-line react/prefer-st
               name="search"
               onPress={() => navigate('PlacesSearch', { onPlaceSelect:  state.params && state.params.onPlaceSelect })}
             />
-            ],
-          menu: {
-            labels: this.menuOptions
-          }
+            ]
         }}
-        onRightElementPress={this.handleMenuSelect}
       />
     );
   }
