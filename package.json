@@ -13,11 +13,14 @@
     "moment": "latest",
     "react": "15.4.2",
     "react-native": "0.42.3",
+    "react-native-drawer": "^2.3.0",
     "react-native-google-places-autocomplete": "^1.2.12",
     "react-native-maps": "^0.13.1",
     "react-native-material-ui": "^1.9.0",
     "react-native-vector-icons": "^4.0.0",
-    "react-navigation": "^1.0.0-beta.9"
+    "react-navigation": "^1.0.0-beta.9",
+    "react-redux": "^5.0.5",
+    "redux": "^3.6.0"
   },
   "devDependencies": {
     "babel-eslint": "^7.2.3",
