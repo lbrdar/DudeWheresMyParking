@@ -1,10 +1,21 @@
 import React, { Component, PropTypes } from 'react';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { Toolbar } from 'react-native-material-ui';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
-import { Container } from '../../common';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { Container, ScreenHeader } from '../../common';
 import config from '../../config';
 import styles from './PlacesSearchStyle';
+import * as Actions from '../../common/actions';
+
+function mapStateToProps(state) {
+  return {
+    userPosition: state.userPositionReducers
+  }
+}
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(Actions, dispatch);
+}
 
 const homePlace = {description: 'Home', geometry: { location: { lat: 48.8152937, lng: 2.4597668 } }};
 const workPlace = {description: 'Work', geometry: { location: { lat: 48.8496818, lng: 2.2940881 } }};
@@ -18,7 +29,7 @@ class PlacesSearch extends Component {  // eslint-disable-line react/prefer-stat
       language: 'en',
       types: 'address',
       radius: 10000,  // bias results to 10km around user's position
-      location:  props.navigation.state && props.navigation.state.params.userPosition,
+      location:  props.userPosition.position,
     };
     this.reverseGeocodingQuery = {
       language: 'en',
@@ -28,21 +39,36 @@ class PlacesSearch extends Component {  // eslint-disable-line react/prefer-stat
                                             'airport', 'parking' ];
   }
 
-  onSelect = (data) => { // eslint-disable-line
-    const { goBack, state } = this.props.navigation;
+  componentWillMount() {
+    this.props.setNavigator(this.props.navigation);
+  }
+
+  onSelect = (data, details) => { // eslint-disable-line
+    const { goBack, navigation: { state } } = this.props;
 
     if (data && data.geometry && data.geometry.location) {
       const { lat, lng } = data.geometry.location;
       if (state.params) state.params.onPlaceSelect({ latitude: lat, longitude: lng });
       goBack();
+    } else if (details && details.geometry && details.geometry.location) {
+      const { lat, lng } = details.geometry.location;
+      if (state.params) state.params.onPlaceSelect({ latitude: lat, longitude: lng });
+      goBack();
     }
   };
 
-  renderRow = (rowData) => {
+  renderRow = (rowData, details) => {
+
     if (rowData.isPredefinedPlace) {
       return (rowData.formatted_address ? `${rowData.description}: ${rowData.formatted_address}` : rowData.description);
+    } else if (rowData.formatted_address) {
+      return rowData.formatted_address;
+    } else if (details && details.formatted_address) {
+      return details.formatted_address;
+    } else if (rowData.description) {
+      return rowData.description;
     }
-    return rowData.formatted_address;
+    return JSON.stringify(rowData);
   };
 
   render() {
@@ -73,12 +99,8 @@ class PlacesSearch extends Component {  // eslint-disable-line react/prefer-stat
   }
 }
 
-PlacesSearch.navigationOptions = ({ navigation }) => ({
-  header: <Toolbar
-    centerElement="Address search"
-    leftElement="arrow-back"
-    onLeftElementPress={navigation.goBack}
-  />
+PlacesSearch.navigationOptions = () => ({
+  header: <ScreenHeader screenName="Address search" />
 });
 
 PlacesSearch.propTypes = {
@@ -90,7 +112,12 @@ PlacesSearch.propTypes = {
         userPosition: PropTypes.shape({})
       })
     })
+  }).isRequired,
+  setNavigator: PropTypes.func.isRequired,
+  goBack: PropTypes.func.isRequired,
+  userPosition: PropTypes.shape({
+    position: PropTypes.shape({})
   }).isRequired
 };
 
-export default PlacesSearch;
+export default connect(mapStateToProps, mapDispatchToProps)(PlacesSearch);
