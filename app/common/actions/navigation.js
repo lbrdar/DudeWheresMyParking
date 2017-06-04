@@ -1,10 +1,5 @@
 import constants from '../constants';
 
-export function getNavigator() {
-  return {
-    type: constants.GET_NAVIGATOR
-  }
-}
 export function setNavigator(navigator) {
   return {
     type: constants.SET_NAVIGATOR,

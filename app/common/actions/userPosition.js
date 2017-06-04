@@ -1,11 +1,6 @@
 import constants from '../constants';
 
-export function getUserPosition() {
-  return {
-    type: constants.GET_USER_POSITION
-  }
-}
-export function setUserPosition(userPosition) {
+export function setUserPosition(userPosition) { // eslint-disable-line import/prefer-default-export
   return {
     type: constants.SET_USER_POSITION,
     userPosition
