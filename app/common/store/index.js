@@ -1,12 +1,8 @@
-import { createStore, combineReducers } from 'redux';
-import drawerReducers from '../reducers/drawer';
-import navigationReducers from '../reducers/navigation';
-import userPositionReducers from '../reducers/userPosition';
-import settingsReducers from '../reducers/settings';
+import { createStore, combineReducers, applyMiddleware } from 'redux';
+import thunkMiddleware from 'redux-thunk'
+import * as Reducers from '../reducers';
 
-export default createStore(combineReducers({
-  drawerReducers,
-  navigationReducers,
-  userPositionReducers,
-  settingsReducers
-}));
+export default createStore(
+  combineReducers({ ...Reducers }),
+  applyMiddleware(thunkMiddleware)
+);

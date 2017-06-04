@@ -1,6 +1,17 @@
 /* eslint-disable no-console, no-undef */
 import config from '../config';
 
+async function getAllParkingTypes() {
+  return fetch(`${config.APIserver}/parking_types`)
+    .then(res => res.json())
+    .catch(err => console.log('Error in get all parking spots: ', err));
+}
+
+async function getAllParkingTakenForSlots() {
+  return fetch(`${config.APIserver}/parking_taken_for_slots`)
+    .then(res => res.json())
+    .catch(err => console.log('Error in get all parking spots: ', err));
+}
 
 async function getAllParkingSpots() {
   return fetch(`${config.APIserver}/parking_spots`)
@@ -36,6 +47,8 @@ async function createParkingSpot(parkingSpot) {
 
 
 export default {
+  getAllParkingTypes,
+  getAllParkingTakenForSlots,
   getAllParkingSpots,
   getParkingSpotsNear,
   getParkingSpot,

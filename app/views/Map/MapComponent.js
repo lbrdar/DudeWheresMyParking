@@ -49,6 +49,8 @@ class Map extends React.Component {
   }
 
   componentWillMount() {
+    this.props.fetchParkingTypes();
+    this.props.fetchParkingTakenForSlots();
     this.props.setNavigator(this.props.navigation);
     this.props.navigation.setParams({ onRefresh: this.onRefresh, onPlaceSelect: this.onPlaceSelect });
   }
@@ -191,7 +193,9 @@ Map.propTypes = {
     setParams: PropTypes.func
   }).isRequired,
   setNavigator: PropTypes.func.isRequired,
-  setUserPosition: PropTypes.func.isRequired
+  setUserPosition: PropTypes.func.isRequired,
+  fetchParkingTypes: PropTypes.func.isRequired,
+  fetchParkingTakenForSlots: PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Map);
