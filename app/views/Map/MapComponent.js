@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import { geoLocationUtils, API } from '../../utils';
 import { Loading } from '../../common';
 import MapHeader from './MapHeader';
-import styles from './MapStyle';
+import styles from './MapStyles';
 import * as Actions from '../../common/actions';
 
 function mapStateToProps(state) {

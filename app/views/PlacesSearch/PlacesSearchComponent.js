@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Container, ScreenHeader } from '../../common';
 import config from '../../config';
-import styles from './PlacesSearchStyle';
+import styles from './PlacesSearchStyles';
 import * as Actions from '../../common/actions';
 
 function mapStateToProps(state) {

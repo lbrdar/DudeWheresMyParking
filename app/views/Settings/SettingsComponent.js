@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { ScreenHeader, RadioButton } from '../../common';
 import * as Actions from '../../common/actions';
-import styles from './SettingsStyle';
+import styles from './SettingsStyles';
 
 function mapStateToProps(state) {
   return {
