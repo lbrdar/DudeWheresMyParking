@@ -37,7 +37,14 @@ class AddParking extends Component {  // eslint-disable-line react/prefer-statel
   componentWillMount() {
     if (!this.props.data.types) this.props.fetchParkingTypes();
     this.props.setNavigator(this.props.navigation);
+    this.props.navigation.setParams({ onAddClick: this.onAddClick });
   }
+
+  onAddClick = () => {
+    const { position, typeId, price } = this.state;
+    this.props.addParkingSpot(position, typeId, price);
+    this.props.goBack();  // TODO: go back only on success, use spinner while waiting on response from API
+  };
 
   onMapSelect = (e) => this.setState({ position: e.nativeEvent.coordinate, showMap: false });
 
@@ -116,8 +123,11 @@ class AddParking extends Component {  // eslint-disable-line react/prefer-statel
   }
 }
 
-AddParking.navigationOptions = () => ({
-  header: <ScreenHeader screenName="Add parking spot" />
+AddParking.navigationOptions = ({ navigation: { state: { params } } }) => ({
+  header: <ScreenHeader
+    screenName="Add parking spot"
+    rightElement={<Button label="Add" onPress={params ? params.onAddClick : () => {}} />}
+  />
 });
 
 AddParking.propTypes = {
@@ -131,9 +141,18 @@ AddParking.propTypes = {
     latitude: PropTypes.number.isRequired,
     longitude: PropTypes.number.isRequired
   }).isRequired,
-  navigation: PropTypes.shape({}).isRequired,
+  navigation: PropTypes.shape({
+    state: PropTypes.shape({
+      params: PropTypes.shape({
+        onAddClick: PropTypes.func
+      })
+    }).isRequired,
+    setParams: PropTypes.func.isRequired
+  }).isRequired,
+  goBack: PropTypes.func.isRequired,
   setNavigator: PropTypes.func.isRequired,
-  fetchParkingTypes: PropTypes.func.isRequired
+  fetchParkingTypes: PropTypes.func.isRequired,
+  addParkingSpot: PropTypes.func.isRequired
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddParking);

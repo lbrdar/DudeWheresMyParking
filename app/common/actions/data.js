@@ -31,3 +31,11 @@ export function fetchParkingTakenForSlots() {
               .catch(err => console.log(err));    // eslint-disable-line no-console
   }
 }
+
+export function addParkingSpot(position, typeId, price) {
+  return function () {
+    return API.createParkingSpot({ latitude: position.latitude, longitude: position.longitude, type_id: typeId, costPerHour: price })
+              .then(() => console.log('Successfully added'))  // eslint-disable-line no-console
+              .catch(err => console.log(err));   // eslint-disable-line no-console
+  }
+}
