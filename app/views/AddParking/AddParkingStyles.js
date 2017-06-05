@@ -4,28 +4,46 @@ export default StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'flex-start',
+    overflow: 'scroll',
   },
   name: {
+    minWidth: '40%',
     fontWeight: 'bold',
     fontSize: 19,
     padding: 8,
   },
-  description: {
-    padding: 8,
-  },
   content: {
-    paddingHorizontal: 4,
+    paddingHorizontal: 2,
+    paddingVertical: 4
   },
-  priceContainer: {
-    paddingLeft: 16,
+  rowContainer: {
     flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center'
+    alignItems: 'stretch',
+    justifyContent: 'flex-start'
   },
+  columnContainer: {
+    maxWidth: '60%',
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
+    paddingTop: 8
+  },
+
   priceInput: {
-    flex: 1
+    paddingTop: 0
   },
-  unitInput: {
-    flex: 2
-  }
+
+  mapContainer: {
+    ...StyleSheet.absoluteFillObject,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+  },
+  map: {
+    ...StyleSheet.absoluteFillObject,
+  },
+
+  buttonsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around'
+  },
 });
