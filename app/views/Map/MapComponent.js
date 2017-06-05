@@ -107,7 +107,7 @@ class Map extends React.Component {
     return geoLocationUtils.calculateDelta([...circleBounds], { latitude, longitude });
   };
   updateUserPosition = ({ coords: { latitude, longitude } }) => {
-    this.props.setUserPosition({ latitude, longitude });
+    this.props.setUserPosition(latitude, longitude);
 
     if (this.state.findParkingNearUser) {
       this.getParkingSpots({latitude, longitude});

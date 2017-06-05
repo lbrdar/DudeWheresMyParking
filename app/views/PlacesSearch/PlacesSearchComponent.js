@@ -29,7 +29,7 @@ class PlacesSearch extends Component {  // eslint-disable-line react/prefer-stat
       language: 'en',
       types: 'address',
       radius: 10000,  // bias results to 10km around user's position
-      location:  props.userPosition.position,
+      location:  props.userPosition,
     };
     this.reverseGeocodingQuery = {
       language: 'en',
@@ -109,14 +109,15 @@ PlacesSearch.propTypes = {
     goBack: PropTypes.func,
     state: PropTypes.shape({
       params: PropTypes.shape({
-        userPosition: PropTypes.shape({})
+        onPlaceSelect: PropTypes.func
       })
     })
   }).isRequired,
   setNavigator: PropTypes.func.isRequired,
   goBack: PropTypes.func.isRequired,
   userPosition: PropTypes.shape({
-    position: PropTypes.shape({})
+    latitude: PropTypes.number.isRequired,
+    longitude: PropTypes.number.isRequired
   }).isRequired
 };
 

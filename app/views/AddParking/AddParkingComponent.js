@@ -70,7 +70,7 @@ class AddParking extends Component {  // eslint-disable-line react/prefer-statel
     const { userPosition, data, settings } = this.props;
 
     if (showMap) {
-      return <SelectOnMap center={userPosition.position} mapType={settings.mapType} onSelect={this.onMapSelect} />
+      return <SelectOnMap center={userPosition} mapType={settings.mapType} onSelect={this.onMapSelect} />
     }
 
     return (
@@ -87,7 +87,7 @@ class AddParking extends Component {  // eslint-disable-line react/prefer-statel
             </View>
           </View>
           <View style={styles.buttonsContainer}>
-            <Button label='Use my location' onPress={() => this.setState({ position: userPosition.position })} />
+            <Button label='Use my location' onPress={() => this.setState({ position: userPosition })} />
             <Button label='Select on map' onPress={() => this.setState({ showMap: true })} />
           </View>
         </View>
@@ -128,10 +128,8 @@ AddParking.propTypes = {
     mapType: PropTypes.string.isRequired
   }).isRequired,
   userPosition: PropTypes.shape({
-    position: PropTypes.shape({
-      latitude: PropTypes.number.isRequired,
-      longitude: PropTypes.number.isRequired
-    }).isRequired
+    latitude: PropTypes.number.isRequired,
+    longitude: PropTypes.number.isRequired
   }).isRequired,
   navigation: PropTypes.shape({}).isRequired,
   setNavigator: PropTypes.func.isRequired,
