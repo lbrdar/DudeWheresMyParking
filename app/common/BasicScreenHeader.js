@@ -18,6 +18,7 @@ class BasicScreenHeader extends Component {  // eslint-disable-line react/prefer
         centerElement={this.props.screenName}
         leftElement="arrow-back"
         onLeftElementPress={this.props.goBack}
+        rightElement={this.props.rightElement}
       />
     );
   }
@@ -25,7 +26,12 @@ class BasicScreenHeader extends Component {  // eslint-disable-line react/prefer
 
 BasicScreenHeader.propTypes = {
   screenName: PropTypes.string.isRequired,
-  goBack: PropTypes.func.isRequired
+  goBack: PropTypes.func.isRequired,
+  rightElement: PropTypes.element
+};
+
+BasicScreenHeader.defaultProps = {
+  rightElement: null
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(BasicScreenHeader);
