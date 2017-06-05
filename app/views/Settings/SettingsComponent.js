@@ -20,7 +20,6 @@ class Settings extends Component {  // eslint-disable-line react/prefer-stateles
   constructor(props) {
     super(props);
     this.state = {
-      selectedType: props.settings.mapType,
       radius: props.settings.radius,
       keyboardOpen: false
     }
@@ -30,10 +29,7 @@ class Settings extends Component {  // eslint-disable-line react/prefer-stateles
     this.props.setNavigator(this.props.navigation);
   }
 
-  handleTypeChange = (type) => {
-    this.setState({ selectedType: type });
-    this.props.setMapType(type);
-  };
+  handleTypeChange = (type) => this.props.setMapType(type);
 
   handleRadiusChange = (value) => {
     const number = parseInt(value);
@@ -59,7 +55,9 @@ class Settings extends Component {  // eslint-disable-line react/prefer-stateles
   };
 
   render() {
-    const { selectedType, radius, keyboardOpen } = this.state;
+    const { radius, keyboardOpen } = this.state;
+    const selectedType = this.props.settings.mapType;
+
     return (
       <KeyboardAvoidingView
         behavior='padding'
