@@ -13,6 +13,7 @@
     "moment": "latest",
     "react": "15.4.2",
     "react-native": "0.42.3",
+    "react-native-default-preference": "^1.1.1",
     "react-native-drawer": "^2.3.0",
     "react-native-google-places-autocomplete": "^1.2.12",
     "react-native-maps": "^0.15.2",
