@@ -31,7 +31,7 @@ class Login extends Component {  // eslint-disable-line react/prefer-stateless-f
   onLoginPress = () => {
     if (this.isValid()) {
       this.setState({ loading: true });
-      this.props.login(this.props.auth.userId, this.state.password);
+      this.props.login(this.props.auth.userId, this.state.password);  // TODO: handle fail (remove loading, show snackbar)
     }
   };
 

@@ -31,7 +31,7 @@ class Register extends Component {  // eslint-disable-line react/prefer-stateles
   onRegisterPress = () => {
     if (this.isValid()) {
       this.setState({ loading: true });
-      this.props.register(this.state.username, this.state.password);
+      this.props.register(this.state.username, this.state.password);  // TODO: handle fail (remove loading, show snackbar)
     }
   };
 
