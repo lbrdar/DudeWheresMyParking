@@ -51,7 +51,7 @@ class Map extends React.Component {
   componentWillMount() {
     this.props.fetchParkingTypes();
     this.props.fetchParkingTakenForSlots();
-    this.props.setNavigator(this.props.navigation);
+    setTimeout(() => this.props.setNavigator(this.props.navigation), 1);
     this.props.navigation.setParams({ onRefresh: this.onRefresh, onPlaceSelect: this.onPlaceSelect });
   }
   componentDidMount() {

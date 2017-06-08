@@ -1,3 +1,4 @@
+export { default as authReducers } from './auth';
 export { default as drawerReducers } from './drawer';
 export { default as navigationReducers } from './navigation';
 export { default as userPositionReducers } from './userPosition';

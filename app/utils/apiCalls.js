@@ -1,6 +1,31 @@
 /* eslint-disable no-console, no-undef */
 import config from '../config';
 
+async function register(username, password) {
+  return fetch(`${config.APIserver}/register`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ username, password })
+  })
+    .then(res => res.json())
+    .catch(err => console.log('Error in register: ', err));
+}
+
+async function login(userId, password) {
+  return fetch(`${config.APIserver}/login`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ userId, password })
+  })
+    .catch(err => console.log('Error in login: ', err));
+}
+
 async function getAllParkingTypes() {
   return fetch(`${config.APIserver}/parking_types`)
     .then(res => res.json())
@@ -47,6 +72,8 @@ async function createParkingSpot(parkingSpot) {
 
 
 export default {
+  login,
+  register,
   getAllParkingTypes,
   getAllParkingTakenForSlots,
   getAllParkingSpots,

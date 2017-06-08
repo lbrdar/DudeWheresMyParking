@@ -26,6 +26,11 @@ class DrawerContentComponent extends Component {
     }
   };
 
+  logout = () => {
+    this.props.setIsLoggedIn(false);
+    this.onSelect('Login');
+  };
+
   render() {
     const { navigator } = this.props.navigation;
     const activeRoute = navigator && navigator.state.routeName;
@@ -63,6 +68,10 @@ class DrawerContentComponent extends Component {
               value: 'Settings',
               active: activeRoute === 'Settings',
               onPress: () => this.onSelect('Settings')
+            },
+            { icon: 'exit-to-app',
+              value: 'Log out',
+              onPress: () => this.logout()
             }
           ]}
         />
@@ -73,9 +82,10 @@ class DrawerContentComponent extends Component {
 
 DrawerContentComponent.propTypes = {
   navigation: PropTypes.shape({
-    navigator: PropTypes.shape({}).isRequired
+    navigator: PropTypes.shape({})
   }).isRequired,
   navigate: PropTypes.func.isRequired,
+  setIsLoggedIn: PropTypes.func.isRequired,
   closeDrawer: PropTypes.func.isRequired
 };
 

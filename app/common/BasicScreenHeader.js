@@ -16,8 +16,8 @@ class BasicScreenHeader extends Component {  // eslint-disable-line react/prefer
     return (
       <Toolbar
         centerElement={this.props.screenName}
-        leftElement="arrow-back"
-        onLeftElementPress={this.props.goBack}
+        leftElement={this.props.allowGoBack ? 'arrow-back' : null}
+        onLeftElementPress={this.props.allowGoBack ? this.props.goBack : null}
         rightElement={this.props.rightElement}
       />
     );
@@ -27,11 +27,13 @@ class BasicScreenHeader extends Component {  // eslint-disable-line react/prefer
 BasicScreenHeader.propTypes = {
   screenName: PropTypes.string.isRequired,
   goBack: PropTypes.func.isRequired,
-  rightElement: PropTypes.element
+  rightElement: PropTypes.element,
+  allowGoBack: PropTypes.bool
 };
 
 BasicScreenHeader.defaultProps = {
-  rightElement: null
+  rightElement: null,
+  allowGoBack: true
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(BasicScreenHeader);
