@@ -23,15 +23,15 @@ class App extends Component {
 
     // get user preferences
     DefaultPreference
-      .getMultiple(['userId', 'isLoggedIn', 'radius', 'mapType'])
+      .getMultiple(['userId', 'username', 'isLoggedIn', 'radius', 'mapType'])
       .then((res) => {
         const userId = res[0];
-        const isLoggedIn = (res[1] === 'true');
-        const radius = (res[2] !== null) ? parseInt(res[2]) || 300 : 300;
-        const mapType = (res[3] !== null) ? res[3] : 'hybrid';
+        const username = res[1] || '';
+        const isLoggedIn = (res[2] === 'true');
+        const radius = (res[3] !== null) ? parseInt(res[3]) || 300 : 300;
+        const mapType = (res[4] !== null) ? res[4] : 'hybrid';
 
-        Store.dispatch(Actions.setIsRegistered(userId));
-        Store.dispatch(Actions.setIsLoggedIn(isLoggedIn));
+        Store.dispatch(Actions.setAuthDefaults(userId, username, isLoggedIn));
         Store.dispatch(Actions.setRadius(radius));
         Store.dispatch(Actions.setMapType(mapType));
 

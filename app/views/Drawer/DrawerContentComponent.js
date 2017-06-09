@@ -64,6 +64,11 @@ class DrawerContentComponent extends Component {
         <Drawer.Section
           divider
           items={[
+            { icon: 'person',
+              value: 'Account',
+              active: activeRoute === 'Account',
+              onPress: () => this.onSelect('Account')
+            },
             { icon: 'settings',
               value: 'Settings',
               active: activeRoute === 'Settings',

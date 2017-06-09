@@ -26,6 +26,24 @@ async function login(userId, password) {
     .catch(err => console.log('Error in login: ', err));
 }
 
+async function getPoints(userId) {
+  return fetch(`${config.APIserver}/users/${userId}`)
+    .then(res => res.json())
+    .catch(err => console.log('Error in get points: ', err));
+}
+
+async function setUsername(userId, username) {
+  return fetch(`${config.APIserver}/users/${userId}`, {
+    method: 'PUT',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ username })
+  })
+    .catch(err => console.log('Error in set username: ', err));
+}
+
 async function getAllParkingTypes() {
   return fetch(`${config.APIserver}/parking_types`)
     .then(res => res.json())
@@ -74,6 +92,8 @@ async function createParkingSpot(parkingSpot) {
 export default {
   login,
   register,
+  getPoints,
+  setUsername,
   getAllParkingTypes,
   getAllParkingTakenForSlots,
   getAllParkingSpots,
