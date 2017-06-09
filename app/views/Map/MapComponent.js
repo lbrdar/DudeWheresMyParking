@@ -8,10 +8,6 @@ import { connect } from 'react-redux';
 import { geoLocationUtils, API } from '../../utils';
 import { Loading } from '../../common';
 import MapHeader from './MapHeader';
-import markerRed from '../../images/marker-red.png';
-import markerYellow from '../../images/marker-yellow.png';
-import markerGreen from '../../images/marker-green.png';
-import markerGray from '../../images/marker-gray.png';
 import styles from './MapStyles';
 import * as Actions from '../../common/actions';
 
@@ -130,37 +126,35 @@ class Map extends React.Component {
   determineMarkerColor = (created, isTaken) => {
     const deltaMs = moment() - moment(created);
     if (isTaken) {
-      return markerGray
+      return 'blue';
     } else if (deltaMs < 15*60*1000) { // 15 min
-      return markerGreen;
+      return 'green';
     } else if (deltaMs < 30*60*1000) { // 30 min
-      return markerYellow;
+      return 'yellow';
+    } else if (deltaMs < 24*60*60*1000) { // 24h
+      return 'red';
     } else {
-      return markerRed;
+      return 'gray';
     }
   };
 
   renderMarkerCallout = () => {
-    const { type, cost, taken, takenFor } = this.state.selectedParkingSpot;
+    const { type, cost, taken } = this.state.selectedParkingSpot;
     return (
       <View style={styles.markerCallout}>
         <Text>Type: {type}</Text>
         <Text>Price per hour: {cost}</Text>
-        <Text>Is free: {taken ? 'false' : 'true'}</Text>
-        {taken ? <Text>Was taken on: {moment(taken).format('DD MMMM YYYY HH:mm')}</Text> : null}
-        {takenFor ? <Text>Should be available on: {moment(taken).add(takenFor, 'seconds').format('DD MMMM YYYY HH:mm')}</Text> : null}
+        {taken ? <Text>*was marked as taken, but should be empty by now</Text> : null}
       </View>
     );
   };
-  renderMarker = ({ id, latitude, longitude, created, taken, takenFor }) => {
+  renderMarker = ({ id, latitude, longitude, created, taken }) => {
     const { selectedParkingSpot, activeMarker } = this.state;
-
-    if (taken && moment(taken).add(takenFor, 'seconds') > moment()) return null; // not free yet, no need to show it to user; TODO: filter it on API
 
     return (
       <MapView.Marker
         key={id}
-        image={this.determineMarkerColor(created, !!taken)}
+        pinColor={this.determineMarkerColor(created, !!taken)}
         coordinate={{ latitude, longitude }}
         onPress={() => this.onMarkerPress(id)}
       >
