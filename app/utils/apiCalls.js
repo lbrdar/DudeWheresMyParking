@@ -75,17 +75,29 @@ async function getParkingSpot(id) {
     .catch(err => console.log('Error in get parking spot: ', err));
 }
 
-async function createParkingSpot(parkingSpot) {
+async function createParkingSpot(parkingSpot, userId) {
   return fetch(`${config.APIserver}/parking_spots`, {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(parkingSpot)
+    body: JSON.stringify({ parkingSpot, userId })
   })
     .then(res => res.json())
     .catch(err => console.log('Error in create parking spot: ', err));
+}
+
+async function takeParkingSpot(id, takenForId, userId) {
+  return fetch(`${config.APIserver}/parking_spots/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ userId, takenForId })
+  })
+    .catch(err => console.log('Error in take parking spot: ', err));
 }
 
 
@@ -99,5 +111,6 @@ export default {
   getAllParkingSpots,
   getParkingSpotsNear,
   getParkingSpot,
-  createParkingSpot
+  createParkingSpot,
+  takeParkingSpot
 };

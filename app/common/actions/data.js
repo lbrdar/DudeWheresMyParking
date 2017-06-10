@@ -32,9 +32,9 @@ export function fetchParkingTakenForSlots() {
   }
 }
 
-export function addParkingSpot(position, typeId, price) {
+export function addParkingSpot(position, typeId, price, userId) {
   return function () {
-    return API.createParkingSpot({ latitude: position.latitude, longitude: position.longitude, type_id: typeId, costPerHour: price })
+    return API.createParkingSpot({ latitude: position.latitude, longitude: position.longitude, type_id: typeId, costPerHour: price }, userId)
               .then(() => console.log('Successfully added'))  // eslint-disable-line no-console
               .catch(err => console.log(err));   // eslint-disable-line no-console
   }

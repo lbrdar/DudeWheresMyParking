@@ -12,7 +12,8 @@ function mapStateToProps(state) {
   return {
     userPosition: state.userPositionReducers,
     data: state.dataReducers,
-    settings: state.settingsReducers
+    settings: state.settingsReducers,
+    auth: state.authReducers
   }
 }
 function mapDispatchToProps(dispatch) {
@@ -42,7 +43,7 @@ class AddParking extends Component {  // eslint-disable-line react/prefer-statel
 
   onAddClick = () => {
     const { position, typeId, price } = this.state;
-    this.props.addParkingSpot(position, typeId, price);
+    this.props.addParkingSpot(position, typeId, price, this.props.auth.userId);
     this.props.goBack();  // TODO: go back only on success, use spinner while waiting on response from API
   };
 
@@ -131,6 +132,9 @@ AddParking.navigationOptions = ({ navigation: { state: { params } } }) => ({
 });
 
 AddParking.propTypes = {
+  auth: PropTypes.shape({
+    userId: PropTypes.string.isRequired
+  }).isRequired,
   data: PropTypes.shape({
     types: PropTypes.arrayOf(PropTypes.shape({})).isRequired
   }).isRequired,

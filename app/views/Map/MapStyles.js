@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import { COLOR } from 'react-native-material-ui';
 
 export default StyleSheet.create({
   container: {
@@ -23,10 +24,27 @@ export default StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  dialogContent: {
-    paddingHorizontal: 4,
+  row: {
+    flexDirection: 'row',
+    paddingVertical: 3
+  },
+  label: {
+    fontWeight: 'bold'
+  },
+  note: {
+    paddingTop: 6
   },
   dialogActionsContainer: {
-    flexDirection: 'row'
+    flexDirection: 'row',
+    justifyContent: 'flex-end'
+  },
+  dropdownContainer: {
+    margin: 6,
+    padding: 6,
+    width: '80%',
+    backgroundColor: COLOR.pink500
+  },
+  dropdown: {
+    width: '60%',
   }
 });

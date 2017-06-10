@@ -1,6 +1,6 @@
 /* eslint-disable no-console, no-undef */
 import React, { PropTypes } from 'react'
-import { View, Text } from 'react-native'
+import { View } from 'react-native'
 import MapView from 'react-native-maps';
 import moment from 'moment';
 import { bindActionCreators } from 'redux';
@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import { geoLocationUtils, API } from '../../utils';
 import { Loading } from '../../common';
 import MapHeader from './MapHeader';
+import MarkerCalloutModal from './MarkerCalloutModal';
 import styles from './MapStyles';
 import * as Actions from '../../common/actions';
 
@@ -41,7 +42,6 @@ class Map extends React.Component {
       isInitialRendering: true,
       loading: true,
       parkingSpots: [],
-      activeMarker: null,
       selectedParkingSpot: null
     };
 
@@ -88,12 +88,15 @@ class Map extends React.Component {
 
   onRegionChangeComplete = region => this.setState({ region });
   onMarkerPress = (id) => {
-    this.setState({ activeMarker: id, selectedParkingSpot: null }); // override previously selected
     API.getParkingSpot(id)
       .then(data => this.setState({ selectedParkingSpot: data }))
       .catch(err => console.log('Failed to retrieve parking spot. ', err));
   };
-  onCalloutPress = () => this.setState({ activeMarker: null, selectedParkingSpot: null });
+  onModalClose = () => this.setState({ selectedParkingSpot: null });
+  onTakeParkingSpot = (id, userId, takenFor_id) => {
+    API.takeParkingSpot(id, userId, takenFor_id)
+       .catch(err => console.log('Failed to take parking spot. ', err));
+  };
 
 
   getParkingSpots = (location) => {
@@ -138,34 +141,19 @@ class Map extends React.Component {
     }
   };
 
-  renderMarkerCallout = () => {
-    const { type, cost, taken } = this.state.selectedParkingSpot;
-    return (
-      <View style={styles.markerCallout}>
-        <Text>Type: {type}</Text>
-        <Text>Price per hour: {cost}</Text>
-        {taken ? <Text>*was marked as taken, but should be empty by now</Text> : null}
-      </View>
-    );
-  };
-  renderMarker = ({ id, latitude, longitude, created, taken }) => {
-    const { selectedParkingSpot, activeMarker } = this.state;
 
+  renderMarker = ({ id, latitude, longitude, created, taken }) => {
     return (
       <MapView.Marker
         key={id}
         pinColor={this.determineMarkerColor(created, !!taken)}
         coordinate={{ latitude, longitude }}
         onPress={() => this.onMarkerPress(id)}
-      >
-        <MapView.Callout style={styles.markerWindow} onPress={this.onCalloutPress}>
-          { (activeMarker === id) ? (selectedParkingSpot ? this.renderMarkerCallout() : <Loading />) : null }
-        </MapView.Callout>
-      </MapView.Marker>
+      />
     )
   };
   render() {
-    const { loading, region, parkingSpots, parkingFindingLocation } = this.state;
+    const { loading, region, parkingSpots, parkingFindingLocation, selectedParkingSpot } = this.state;
     const { settings: { radius, mapType } } = this.props;
 
     if (loading) return <Loading />;
@@ -188,6 +176,13 @@ class Map extends React.Component {
           />
           { parkingSpots.length ? parkingSpots.map(this.renderMarker) : null }
         </MapView>
+        { selectedParkingSpot ?
+          <MarkerCalloutModal
+            parkingSpot={selectedParkingSpot}
+            closeModal={this.onModalClose}
+            takeParkingSpot={this.onTakeParkingSpot}
+          /> : null
+        }
       </View>
 
     );
