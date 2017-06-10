@@ -70,6 +70,9 @@ class Map extends React.Component {
     }
   }
   componentWillReceiveProps(nextProps) {
+    if ((nextProps.settings.radius !== this.props.settings.radius)) {
+      this.getParkingSpots(undefined, nextProps.settings.radius);
+    }
     if ((nextProps.settings.fetchingPeriod !== this.props.settings.fetchingPeriod)) {
       this.clearInterval(this.timerID);
       this.timerID = this.setInterval(() => this.getParkingSpots(), nextProps.settings.fetchingPeriod);
@@ -133,10 +136,8 @@ class Map extends React.Component {
   };
 
 
-  getParkingSpots = (location) => {
-    if (!location) location = this.state.parkingFindingLocation;
-
-    API.getParkingSpotsNear(location, this.props.settings.radius)
+  getParkingSpots = (location = this.state.parkingFindingLocation, radius = this.props.settings.radius) => {
+    API.getParkingSpotsNear(location, radius)
        .then(parkingSpots => ( parkingSpots && this.setState({ parkingSpots }) ))
        .catch(err => console.log('Failed to retrieve parking spots. ', err));
   };
