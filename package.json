@@ -12,6 +12,7 @@
   "dependencies": {
     "moment": "latest",
     "react": "15.4.2",
+    "react-mixin": "^2.0.2",
     "react-native": "0.42.3",
     "react-native-default-preference": "^1.1.1",
     "react-native-drawer": "^2.3.0",
@@ -22,6 +23,7 @@
     "react-native-vector-icons": "^4.0.0",
     "react-navigation": "^1.0.0-beta.9",
     "react-redux": "^5.0.5",
+    "react-timer-mixin": "^0.13.3",
     "redux": "^3.6.0",
     "redux-thunk": "^2.2.0"
   },

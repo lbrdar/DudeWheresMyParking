@@ -23,17 +23,17 @@ class App extends Component {
 
     // get user preferences
     DefaultPreference
-      .getMultiple(['userId', 'username', 'isLoggedIn', 'radius', 'mapType'])
-      .then((res) => {
-        const userId = res[0];
-        const username = res[1] || '';
-        const isLoggedIn = (res[2] === 'true');
-        const radius = (res[3] !== null) ? parseInt(res[3]) || 300 : 300;
-        const mapType = (res[4] !== null) ? res[4] : 'hybrid';
+      .getAll()
+      .then((data) => {
+        const { userId, username, mapType } = data;
+        const isLoggedIn = (data.isLoggedIn === 'true');
+        const radius = (data.radius !== null) && parseInt(data.radius);
+        const fetchOnPositionChange = (data.fetchOnPositionChange === 'true');
+        const fetchPeriodically = (data.fetchPeriodically === 'true');
+        const fetchingPeriod = data.fetchingPeriod && parseInt(data.fetchingPeriod);
 
         Store.dispatch(Actions.setAuthDefaults(userId, username, isLoggedIn));
-        Store.dispatch(Actions.setRadius(radius));
-        Store.dispatch(Actions.setMapType(mapType));
+        Store.dispatch(Actions.setSettingsDefaults(radius, mapType, fetchOnPositionChange, fetchPeriodically, fetchingPeriod));
 
         // set initial screen --> by default it's Register, if user is registered and logged in go to Map, otherwise go to Login
         let initialRouteName = 'Register';

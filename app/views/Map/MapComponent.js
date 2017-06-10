@@ -1,6 +1,8 @@
 /* eslint-disable no-console, no-undef */
-import React, { PropTypes } from 'react'
-import { View } from 'react-native'
+import React, { PropTypes } from 'react';
+import ReactMixin from 'react-mixin';
+import TimerMixin from 'react-timer-mixin';
+import { View } from 'react-native';
 import MapView from 'react-native-maps';
 import moment from 'moment';
 import { bindActionCreators } from 'redux';
@@ -46,6 +48,7 @@ class Map extends React.Component {
     };
 
     this.watchID = null;
+    this.timerID = null;
   }
 
   componentWillMount() {
@@ -55,14 +58,44 @@ class Map extends React.Component {
     this.props.navigation.setParams({ onRefresh: this.onRefresh, onPlaceSelect: this.onPlaceSelect });
   }
   componentDidMount() {
-    this.watchID = navigator.geolocation.watchPosition(
-      this.updateUserPosition,
-      err => console.log('Error in navigator: ', err),    // TODO: add denied location handling
-      { enableHighAccuracy: true, distanceFilter: 1 }
-    );
+    if (this.props.settings.fetchOnPositionChange) {
+      this.watchID = navigator.geolocation.watchPosition(
+        this.updateUserPosition,
+        err => console.log('Error in navigator: ', err),    // TODO: add denied location handling
+        { enableHighAccuracy: true, distanceFilter: 1 }
+      );
+    }
+    if (this.props.settings.fetchPeriodically) {
+      this.timerID = this.setInterval(() => this.getParkingSpots(), this.props.settings.fetchingPeriod); // auto refresh
+    }
+  }
+  componentWillReceiveProps(nextProps) {
+    if ((nextProps.settings.fetchingPeriod !== this.props.settings.fetchingPeriod)) {
+      this.clearInterval(this.timerID);
+      this.timerID = this.setInterval(() => this.getParkingSpots(), nextProps.settings.fetchingPeriod);
+    }
+    if (nextProps.settings.fetchPeriodically !== this.props.settings.fetchPeriodically) {
+      if (nextProps.settings.fetchPeriodically) {
+        this.timerID = this.setInterval(() => this.getParkingSpots(), nextProps.settings.fetchingPeriod);
+      } else {
+        this.clearInterval(this.timerID);
+      }
+    }
+    if (nextProps.settings.fetchOnPositionChange !== this.props.settings.fetchOnPositionChange) {
+      if (nextProps.settings.fetchOnPositionChange) {
+        this.watchID = navigator.geolocation.watchPosition(
+          this.updateUserPosition,
+          err => console.log('Error in navigator: ', err),    // TODO: add denied location handling
+          { enableHighAccuracy: true, distanceFilter: 1 }
+        );
+      } else {
+        navigator.geolocation.clearWatch(this.watchID);
+      }
+    }
   }
   componentWillUnmount() {
     navigator.geolocation.clearWatch(this.watchID);
+    this.clearInterval(this.timerID);
   }
 
   onRefresh = () => {
@@ -74,7 +107,7 @@ class Map extends React.Component {
     );
 
     if (!this.state.findParkingNearUser) {  // if it's true, it will be handled when new userPosition is received in updateUserPosition
-      this.getParkingSpots(this.state.parkingFindingLocation);
+      this.getParkingSpots();
     }
   };
 
@@ -83,7 +116,8 @@ class Map extends React.Component {
       region: this.getRegion(latitude, longitude, this.props.settings.radius),
       parkingFindingLocation: { latitude, longitude },
       findParkingNearUser: false
-    })
+    });
+    this.getParkingSpots({ latitude, longitude });
   };
 
   onRegionChangeComplete = region => this.setState({ region });
@@ -100,6 +134,8 @@ class Map extends React.Component {
 
 
   getParkingSpots = (location) => {
+    if (!location) location = this.state.parkingFindingLocation;
+
     API.getParkingSpotsNear(location, this.props.settings.radius)
        .then(parkingSpots => ( parkingSpots && this.setState({ parkingSpots }) ))
        .catch(err => console.log('Failed to retrieve parking spots. ', err));
@@ -195,6 +231,9 @@ Map.navigationOptions = ({ navigation }) => ({
 
 Map.propTypes = {
   settings: PropTypes.shape({
+    fetchOnPositionChange: PropTypes.bool.isRequired,
+    fetchPeriodically: PropTypes.bool.isRequired,
+    fetchingPeriod: PropTypes.number.isRequired,
     radius: PropTypes.number.isRequired,
     mapType: PropTypes.string.isRequired
   }).isRequired,
@@ -207,5 +246,7 @@ Map.propTypes = {
   fetchParkingTypes: PropTypes.func.isRequired,
   fetchParkingTakenForSlots: PropTypes.func.isRequired,
 };
+
+ReactMixin(Map.prototype, TimerMixin);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Map);
