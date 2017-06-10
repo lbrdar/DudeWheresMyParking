@@ -90,8 +90,8 @@ class AddParking extends Component {
           <View style={styles.rowContainer}>
             <Text style={styles.name}>Position</Text>
             <View style={styles.columnContainer}>
-              <Text>Latitude: {position.latitude}</Text>
-              <Text>Longitude: {position.longitude}</Text>
+              <Text>Latitude: {position.latitude && position.latitude.toFixed(6)}</Text>
+              <Text>Longitude: {position.longitude && position.longitude.toFixed(6)}</Text>
             </View>
           </View>
           <View style={styles.buttonsContainer}>
