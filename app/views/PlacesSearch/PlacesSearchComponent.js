@@ -20,7 +20,7 @@ function mapDispatchToProps(dispatch) {
 const homePlace = {description: 'Home', geometry: { location: { lat: 48.8152937, lng: 2.4597668 } }};
 const workPlace = {description: 'Work', geometry: { location: { lat: 48.8496818, lng: 2.2940881 } }};
 
-class PlacesSearch extends Component {  // eslint-disable-line react/prefer-stateless-function
+class PlacesSearch extends Component {
   constructor(props) {
     super(props);
 
@@ -43,7 +43,7 @@ class PlacesSearch extends Component {  // eslint-disable-line react/prefer-stat
     this.props.setNavigator(this.props.navigation);
   }
 
-  onSelect = (data, details) => { // eslint-disable-line
+  onSelect = (data, details) => {
     const { goBack, navigation: { state } } = this.props;
 
     if (data && data.geometry && data.geometry.location) {

@@ -198,7 +198,7 @@ Map.propTypes = {
     radius: PropTypes.number.isRequired,
     mapType: PropTypes.string.isRequired
   }).isRequired,
-  navigation: PropTypes.shape({ // eslint-disable-line
+  navigation: PropTypes.shape({
     navigate: PropTypes.func,
     setParams: PropTypes.func
   }).isRequired,

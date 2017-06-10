@@ -20,7 +20,7 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators(Actions, dispatch);
 }
 
-class AddParking extends Component {  // eslint-disable-line react/prefer-stateless-function
+class AddParking extends Component {
   constructor() {
     super();
     this.state = {

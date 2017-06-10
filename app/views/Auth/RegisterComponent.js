@@ -13,7 +13,7 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators(Actions, dispatch);
 }
 
-class Register extends Component {  // eslint-disable-line react/prefer-stateless-function
+class Register extends Component {
   constructor(props) {
     super(props);
     this.state = {

@@ -15,7 +15,7 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators(Actions, dispatch);
 }
 
-class Login extends Component {  // eslint-disable-line react/prefer-stateless-function
+class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
