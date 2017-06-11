@@ -24,10 +24,6 @@ class Login extends Component {
     }
   }
 
-  componentWillMount() {
-    this.props.setNavigator(this.props.navigation);
-  }
-
   onLoginPress = () => {
     if (this.isValid()) {
       this.setState({ loading: true });
@@ -83,8 +79,6 @@ Login.propTypes = {
   auth: PropTypes.shape({
     userId: PropTypes.string.isRequired
   }).isRequired,
-  navigation: PropTypes.shape({}).isRequired,
-  setNavigator: PropTypes.func.isRequired,
   login: PropTypes.func.isRequired,
 };
 

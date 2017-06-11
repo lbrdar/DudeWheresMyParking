@@ -54,8 +54,7 @@ class Map extends React.Component {
   componentWillMount() {
     this.props.fetchParkingTypes();
     this.props.fetchParkingTakenForSlots();
-    setTimeout(() => this.props.setNavigator(this.props.navigation), 1);
-    this.props.navigation.setParams({ onRefresh: this.onRefresh, onPlaceSelect: this.onPlaceSelect });
+    this.props.setParams({ onRefresh: this.onRefresh, onPlaceSelect: this.onPlaceSelect }, this.props.navigation.state.key);
   }
   componentDidMount() {
     if (this.props.settings.fetchOnPositionChange) {
@@ -239,10 +238,11 @@ Map.propTypes = {
     mapType: PropTypes.string.isRequired
   }).isRequired,
   navigation: PropTypes.shape({
-    navigate: PropTypes.func,
-    setParams: PropTypes.func
+    state: PropTypes.shape({
+      key: PropTypes.string.isRequired
+    }).isRequired,
   }).isRequired,
-  setNavigator: PropTypes.func.isRequired,
+  setParams: PropTypes.func.isRequired,
   setUserPosition: PropTypes.func.isRequired,
   fetchParkingTypes: PropTypes.func.isRequired,
   fetchParkingTakenForSlots: PropTypes.func.isRequired,

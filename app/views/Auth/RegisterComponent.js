@@ -24,10 +24,6 @@ class Register extends Component {
     }
   }
 
-  componentWillMount() {
-    this.props.setNavigator(this.props.navigation);
-  }
-
   onRegisterPress = () => {
     if (this.isValid()) {
       this.setState({ loading: true });
@@ -100,8 +96,6 @@ Register.navigationOptions = () => ({
 });
 
 Register.propTypes = {
-  navigation: PropTypes.shape({}).isRequired,
-  setNavigator: PropTypes.func.isRequired,
   register: PropTypes.func.isRequired,
 };
 

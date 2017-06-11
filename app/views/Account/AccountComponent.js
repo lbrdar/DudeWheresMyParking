@@ -24,7 +24,6 @@ class Account extends Component {
   }
 
   componentWillMount() {
-    this.props.setNavigator(this.props.navigation);
     this.props.fetchPoints(this.props.auth.userId); // update points
   }
 
@@ -73,8 +72,6 @@ Account.propTypes = {
     username: PropTypes.string.isRequired,
     points: PropTypes.number
   }).isRequired,
-  navigation: PropTypes.shape({}).isRequired,
-  setNavigator: PropTypes.func.isRequired,
   fetchPoints: PropTypes.func.isRequired,
   setUsername: PropTypes.func.isRequired,
 };

@@ -39,10 +39,6 @@ class PlacesSearch extends Component {
                                             'airport', 'parking' ];
   }
 
-  componentWillMount() {
-    this.props.setNavigator(this.props.navigation);
-  }
-
   onSelect = (data, details) => {
     const { goBack, navigation: { state } } = this.props;
 
@@ -113,7 +109,6 @@ PlacesSearch.propTypes = {
       })
     })
   }).isRequired,
-  setNavigator: PropTypes.func.isRequired,
   goBack: PropTypes.func.isRequired,
   userPosition: PropTypes.shape({
     latitude: PropTypes.number.isRequired,

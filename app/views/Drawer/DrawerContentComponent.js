@@ -18,10 +18,11 @@ function mapDispatchToProps(dispatch) {
 class DrawerContentComponent extends Component {
 
   onSelect = (routeName) => {
-    const { closeDrawer, navigate, navigation: { navigator } } = this.props;
+    const { closeDrawer, navigate, navigation } = this.props;
+    const activeRoute = navigation.routes[navigation.routes.length - 1].routeName;
 
     closeDrawer();
-    if (navigator.state.routeName !== routeName) {
+    if (activeRoute !== routeName) {
       navigate(routeName);
     }
   };
@@ -32,8 +33,9 @@ class DrawerContentComponent extends Component {
   };
 
   render() {
-    const { navigator } = this.props.navigation;
-    const activeRoute = navigator && navigator.state.routeName;
+    const { navigation } = this.props;
+    const activeRoute = navigation.routes[navigation.routes.length - 1].routeName;
+
     return (
       <Drawer>
         <Drawer.Header >
@@ -87,7 +89,7 @@ class DrawerContentComponent extends Component {
 
 DrawerContentComponent.propTypes = {
   navigation: PropTypes.shape({
-    navigator: PropTypes.shape({})
+    state: PropTypes.shape({})
   }).isRequired,
   navigate: PropTypes.func.isRequired,
   setIsLoggedIn: PropTypes.func.isRequired,

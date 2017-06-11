@@ -1,15 +1,13 @@
 import React, { Component } from 'react';
 import { ThemeProvider } from 'react-native-material-ui';
-import { StackNavigator } from 'react-navigation';
 import { Provider } from 'react-redux';
 import { myTheme, Loading } from '../../common';
 import { getUserPreferences } from '../../utils';
-import routes from '../../routes';
+import AppWithNavigationState from './AppNavigator';
 import MyDrawer from '../../views/Drawer';
 import Store from '../../common/store';
+import { initializeNavigation } from '../../common/actions/navigation';
 
-
-let AppNavigator = null;
 
 class App extends Component {
   constructor() {
@@ -23,7 +21,7 @@ class App extends Component {
       // set initial screen --> by default it's Register, if user is registered and logged in go to Map, otherwise go to Login
       let initialRouteName = 'Register';
       if (data.userId) initialRouteName = (data.isLoggedIn === 'true') ? 'Map' : 'Login';
-      AppNavigator = StackNavigator(routes, { initialRouteName });
+      Store.dispatch(initializeNavigation(initialRouteName));
 
       this.setState({ loading: false });
     });
@@ -37,7 +35,7 @@ class App extends Component {
             <Loading />
             :
             <MyDrawer>
-              <AppNavigator />
+              <AppWithNavigationState />
             </MyDrawer>
           }
         </ThemeProvider>

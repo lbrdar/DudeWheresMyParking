@@ -37,8 +37,7 @@ class AddParking extends Component {
 
   componentWillMount() {
     if (!this.props.data.types) this.props.fetchParkingTypes();
-    this.props.setNavigator(this.props.navigation);
-    this.props.navigation.setParams({ onAddClick: this.onAddClick });
+    this.props.setParams({ onAddClick: this.onAddClick }, this.props.navigation.state.key);
   }
 
   onAddClick = () => {
@@ -149,12 +148,13 @@ AddParking.propTypes = {
     state: PropTypes.shape({
       params: PropTypes.shape({
         onAddClick: PropTypes.func
-      })
+      }),
+      key: PropTypes.string.isRequired
     }).isRequired,
     setParams: PropTypes.func.isRequired
   }).isRequired,
   goBack: PropTypes.func.isRequired,
-  setNavigator: PropTypes.func.isRequired,
+  setParams: PropTypes.func.isRequired,
   fetchParkingTypes: PropTypes.func.isRequired,
   addParkingSpot: PropTypes.func.isRequired
 };

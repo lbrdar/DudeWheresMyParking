@@ -35,10 +35,6 @@ class Settings extends Component {
     };
   }
 
-  componentWillMount() {
-    this.props.setNavigator(this.props.navigation);
-  }
-
   setFetchingPeriod = (index) => {
     this.setState({ fetchingPeriod: this.periods[index] });
     this.props.setFetchingPeriod(this.periods[index].value);
@@ -187,8 +183,6 @@ Settings.propTypes = {
     radius: PropTypes.number.isRequired,
     mapType: PropTypes.string.isRequired
   }).isRequired,
-  navigation: PropTypes.shape({}).isRequired,
-  setNavigator: PropTypes.func.isRequired,
   setMapType: PropTypes.func.isRequired,
   setRadius: PropTypes.func.isRequired,
   toggleFetchOnPositionChange: PropTypes.func.isRequired,
