@@ -1,14 +1,15 @@
 import React, { Component, PropTypes } from 'react';
-import { View, Text, TextInput, KeyboardAvoidingView } from 'react-native';
+import { View, Text, TextInput, ScrollView } from 'react-native';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { ScreenHeader } from '../../common';
+import { ScreenHeader, Button } from '../../common';
 import * as Actions from '../../common/actions';
 import styles from './AccountStyles';
 
 function mapStateToProps(state) {
   return {
-    auth: state.authReducers
+    auth: state.authReducers,
+    data: state.dataReducers
   }
 }
 function mapDispatchToProps(dispatch) {
@@ -27,6 +28,8 @@ class Account extends Component {
     this.props.fetchPoints(this.props.auth.userId); // update points
   }
 
+  onAddAddress = () => this.props.navigate('AddressForm', { handleSave: this.saveAddress });
+
   setUsername = (value) => this.setState({ username: value });
 
   saveUsername = () => {
@@ -39,12 +42,26 @@ class Account extends Component {
     }
   };
 
+  saveAddress = (position, address, label) => {
+    this.props.addUserAddress(position, address, label, this.props.auth.userId)
+  };
+
+  renderAddress = (address, key) => (
+    <View style={styles.addressRow} key={key}>
+      <View style={styles.address}>
+        <Text style={styles.addressLabel}>{address.label}: </Text>
+        <Text style={styles.addressValue}>{address.address}</Text>
+      </View>
+    </View>
+  );
+
   render() {
     const { username } = this.state;
+    const { auth, data } = this.props;
 
     return (
-      <KeyboardAvoidingView behavior='padding' style={styles.container}>
-        <View style={styles.content}>
+      <ScrollView>
+        <View style={styles.contentRow}>
           <Text style={styles.name}>Username</Text>
           <TextInput
             style={styles.input}
@@ -53,11 +70,24 @@ class Account extends Component {
             onEndEditing={this.saveUsername}
           />
         </View>
-        <View style={styles.content}>
+        <View style={styles.contentRow}>
           <Text style={styles.name}>Points</Text>
-          <Text style={styles.input}>{this.props.auth.points}</Text>
+          <Text style={styles.input}>{auth.points}</Text>
         </View>
-      </KeyboardAvoidingView>
+        <View style={styles.content}>
+          <View style={styles.row}>
+            <Text style={styles.name}>Addresses</Text>
+            <Button accent label="+ Add" onPress={this.onAddAddress} />
+          </View>
+
+          <Text style={styles.description}>
+            These are your addresses that will be available for you to select when searching for parking spots.
+          </Text>
+          <View style={styles.listContainer}>
+            { data.userAddresses.length ? data.userAddresses.map(this.renderAddress) : null }
+          </View>
+        </View>
+      </ScrollView>
     );
   }
 }
@@ -72,8 +102,13 @@ Account.propTypes = {
     username: PropTypes.string.isRequired,
     points: PropTypes.number
   }).isRequired,
+  data: PropTypes.shape({
+    userAddresses: PropTypes.arrayOf(PropTypes.shape({})).isRequired
+  }).isRequired,
+  navigate: PropTypes.func.isRequired,
   fetchPoints: PropTypes.func.isRequired,
   setUsername: PropTypes.func.isRequired,
+  addUserAddress: PropTypes.func.isRequired
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Account);

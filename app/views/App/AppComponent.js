@@ -7,6 +7,7 @@ import AppWithNavigationState from './AppNavigator';
 import MyDrawer from '../../views/Drawer';
 import Store from '../../common/store';
 import { initializeNavigation } from '../../common/actions/navigation';
+import { fetchUserAddresses } from '../../common/actions/data';
 
 
 class App extends Component {
@@ -22,6 +23,9 @@ class App extends Component {
       let initialRouteName = 'Register';
       if (data.userId) initialRouteName = (data.isLoggedIn === 'true') ? 'Map' : 'Login';
       Store.dispatch(initializeNavigation(initialRouteName));
+
+      // fetch addresses
+      Store.dispatch(fetchUserAddresses(data.userId));
 
       this.setState({ loading: false });
     });

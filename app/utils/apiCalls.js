@@ -32,6 +32,25 @@ async function getPoints(userId) {
     .catch(err => console.log('Error in get points: ', err));
 }
 
+async function getUserAddresses(userId) {
+  return fetch(`${config.APIserver}/user_addresses/${userId}`)
+    .then(res => res.json())
+    .catch(err => console.log('Error in get user addresses: ', err));
+}
+
+async function createUserAddress(address, userId) {
+  return fetch(`${config.APIserver}/user_addresses/${userId}`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(address)
+  })
+    .then(res => res.json())
+    .catch(err => console.log('Error in create parking spot: ', err));
+}
+
 async function setUsername(userId, username) {
   return fetch(`${config.APIserver}/users/${userId}`, {
     method: 'PUT',
@@ -106,6 +125,8 @@ export default {
   register,
   getPoints,
   setUsername,
+  getUserAddresses,
+  createUserAddress,
   getAllParkingTypes,
   getAllParkingTakenForSlots,
   getAllParkingSpots,
