@@ -20,7 +20,7 @@ export default function (state, action) {
     case constants.ON_REGISTERED:
       DefaultPreference.set('userId', action.userId.toString());
       DefaultPreference.set('username', action.username);
-      DefaultPreference.set('isLoggedIn', true);
+      DefaultPreference.set('isLoggedIn', 'true');
       return { ...state, userId: action.userId.toString(), username: action.username, isLoggedIn: true };
 
     case constants.SET_USERNAME:
