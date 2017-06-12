@@ -17,7 +17,7 @@ import * as Actions from '../../common/actions';
 function mapStateToProps(state) {
   return {
     settings: state.settingsReducers,
-    drawer: state.drawerReducers
+    data: state.dataReducers
   }
 }
 function mapDispatchToProps(dispatch) {
@@ -43,7 +43,6 @@ class Map extends React.Component {
       findParkingNearUser: true,
       isInitialRendering: true,
       loading: true,
-      parkingSpots: [],
       selectedParkingSpot: null
     };
 
@@ -135,16 +134,10 @@ class Map extends React.Component {
       .catch(err => console.log('Failed to retrieve parking spot. ', err));
   };
   onModalClose = () => this.setState({ selectedParkingSpot: null });
-  onTakeParkingSpot = (id, userId, takenFor_id) => {
-    API.takeParkingSpot(id, userId, takenFor_id)
-       .catch(err => console.log('Failed to take parking spot. ', err));
-  };
 
 
   getParkingSpots = (location = this.state.parkingFindingLocation, radius = this.props.settings.radius) => {
-    API.getParkingSpotsNear(location, radius)
-       .then(parkingSpots => ( parkingSpots && this.setState({ parkingSpots }) ))
-       .catch(err => console.log('Failed to retrieve parking spots. ', err));
+    this.props.fetchParkingSpots(location, radius)
   };
   getRegion = (latitude, longitude, radius) => {
     const circleBounds = geoLocationUtils.getCircleBounds({ latitude, longitude }, radius);
@@ -195,8 +188,8 @@ class Map extends React.Component {
     )
   };
   render() {
-    const { loading, region, parkingSpots, parkingFindingLocation, selectedParkingSpot } = this.state;
-    const { settings: { radius, mapType } } = this.props;
+    const { loading, region, parkingFindingLocation, selectedParkingSpot } = this.state;
+    const { settings: { radius, mapType }, data: { parkingSpots } } = this.props;
 
     if (loading) return <Loading />;
 
@@ -222,7 +215,6 @@ class Map extends React.Component {
           <MarkerCalloutModal
             parkingSpot={selectedParkingSpot}
             closeModal={this.onModalClose}
-            takeParkingSpot={this.onTakeParkingSpot}
           /> : null
         }
       </View>
@@ -248,8 +240,12 @@ Map.propTypes = {
       key: PropTypes.string.isRequired
     }).isRequired,
   }).isRequired,
+  data: PropTypes.shape({
+    parkingSpots: PropTypes.arrayOf(PropTypes.shape({})).isRequired
+  }).isRequired,
   setParams: PropTypes.func.isRequired,
   setUserPosition: PropTypes.func.isRequired,
+  fetchParkingSpots: PropTypes.func.isRequired,
   fetchParkingTypes: PropTypes.func.isRequired,
   fetchParkingTakenForSlots: PropTypes.func.isRequired,
 };

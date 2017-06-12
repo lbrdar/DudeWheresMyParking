@@ -9,14 +9,20 @@ import {
 } from 'react-native-material-ui';
 import ModalDropdown from 'react-native-modal-dropdown';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import { Button } from '../../common';
 import styles from './MapStyles';
+import * as Actions from '../../common/actions/data';
 
 function mapStateToProps(state) {
   return {
     auth: state.authReducers,
     data: state.dataReducers
   }
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(Actions, dispatch);
 }
 
 class MarkerCalloutModal extends React.Component {
@@ -129,4 +135,4 @@ MarkerCalloutModal.propTypes = {
 };
 
 
-export default connect(mapStateToProps)(MarkerCalloutModal);
+export default connect(mapStateToProps, mapDispatchToProps)(MarkerCalloutModal);
