@@ -10,7 +10,7 @@ import styles from './DrawerStyles';
 
 function mapStateToProps(state) {
   return {
-    navigation: state.navigationReducers
+    navigation: state.navigation
   }
 }
 function mapDispatchToProps(dispatch) {

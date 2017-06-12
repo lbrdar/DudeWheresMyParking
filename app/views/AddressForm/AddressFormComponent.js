@@ -11,8 +11,8 @@ import * as Actions from '../../common/actions';
 
 function mapStateToProps(state) {
   return {
-    userPosition: state.userPositionReducers,
-    auth: state.authReducers
+    userPosition: state.userPosition,
+    auth: state.auth
   }
 }
 function mapDispatchToProps(dispatch) {

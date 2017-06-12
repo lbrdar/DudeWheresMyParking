@@ -1,6 +1,6 @@
-export { default as authReducers } from './auth';
-export { default as drawerReducers } from './drawer';
-export { default as navigationReducers } from './navigation';
-export { default as userPositionReducers } from './userPosition';
-export { default as settingsReducers } from './settings';
-export { default as dataReducers } from './data';
+export { default as auth } from './auth';
+export { default as drawer } from './drawer';
+export { default as navigation } from './navigation';
+export { default as userPosition } from './userPosition';
+export { default as settings } from './settings';
+export { default as data } from './data';

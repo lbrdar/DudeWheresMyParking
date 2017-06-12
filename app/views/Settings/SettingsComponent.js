@@ -10,7 +10,7 @@ import styles from './SettingsStyles';
 
 function mapStateToProps(state) {
   return {
-    settings: state.settingsReducers
+    settings: state.settings
   }
 }
 function mapDispatchToProps(dispatch) {

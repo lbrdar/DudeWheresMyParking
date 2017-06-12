@@ -10,7 +10,7 @@ import * as Actions from '../../common/actions';
 
 function mapStateToProps(state) {
   return {
-    drawer: state.drawerReducers
+    drawer: state.drawer
   }
 }
 function mapDispatchToProps(dispatch) {

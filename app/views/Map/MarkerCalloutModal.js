@@ -16,8 +16,8 @@ import * as Actions from '../../common/actions/data';
 
 function mapStateToProps(state) {
   return {
-    auth: state.authReducers,
-    data: state.dataReducers
+    auth: state.auth,
+    data: state.data
   }
 }
 

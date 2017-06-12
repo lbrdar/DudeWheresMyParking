@@ -8,7 +8,7 @@ import styles from './AuthStyles';
 
 function mapStateToProps(state) {
   return {
-    auth: state.authReducers
+    auth: state.auth
   }
 }
 function mapDispatchToProps(dispatch) {

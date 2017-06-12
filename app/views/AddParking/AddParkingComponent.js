@@ -11,10 +11,10 @@ import styles from './AddParkingStyles';
 
 function mapStateToProps(state) {
   return {
-    userPosition: state.userPositionReducers,
-    data: state.dataReducers,
-    settings: state.settingsReducers,
-    auth: state.authReducers
+    userPosition: state.userPosition,
+    data: state.data,
+    settings: state.settings,
+    auth: state.auth
   }
 }
 function mapDispatchToProps(dispatch) {

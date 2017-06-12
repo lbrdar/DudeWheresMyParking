@@ -9,8 +9,8 @@ import styles from './AccountStyles';
 
 function mapStateToProps(state) {
   return {
-    auth: state.authReducers,
-    data: state.dataReducers
+    auth: state.auth,
+    data: state.data
   }
 }
 function mapDispatchToProps(dispatch) {

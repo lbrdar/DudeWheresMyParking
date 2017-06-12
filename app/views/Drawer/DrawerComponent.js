@@ -9,7 +9,7 @@ import styles from './DrawerStyles';
 
 function mapStateToProps(state) {
   return {
-    drawer: state.drawerReducers
+    drawer: state.drawer
   }
 }
 function mapDispatchToProps(dispatch) {

@@ -10,8 +10,8 @@ import * as Actions from '../../common/actions';
 
 function mapStateToProps(state) {
   return {
-    userPosition: state.userPositionReducers,
-    data: state.dataReducers
+    userPosition: state.userPosition,
+    data: state.data
   }
 }
 function mapDispatchToProps(dispatch) {

@@ -8,7 +8,7 @@ export const AppNavigator = StackNavigator(routes);
 
 
 const mapStateToProps = state => ({
-  navigation: state.navigationReducers,
+  navigation: state.navigation,
 });
 
 const AppWithNavigationState = ({ dispatch, navigation }) => (

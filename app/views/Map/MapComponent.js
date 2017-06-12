@@ -16,8 +16,8 @@ import * as Actions from '../../common/actions';
 
 function mapStateToProps(state) {
   return {
-    settings: state.settingsReducers,
-    data: state.dataReducers
+    settings: state.settings,
+    data: state.data
   }
 }
 function mapDispatchToProps(dispatch) {
