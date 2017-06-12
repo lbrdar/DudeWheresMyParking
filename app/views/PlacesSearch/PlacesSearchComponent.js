@@ -10,15 +10,24 @@ import * as Actions from '../../common/actions';
 
 function mapStateToProps(state) {
   return {
-    userPosition: state.userPositionReducers
+    userPosition: state.userPositionReducers,
+    data: state.dataReducers
   }
 }
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(Actions, dispatch);
 }
 
-const homePlace = {description: 'Home', geometry: { location: { lat: 48.8152937, lng: 2.4597668 } }};
-const workPlace = {description: 'Work', geometry: { location: { lat: 48.8496818, lng: 2.2940881 } }};
+
+function generatePredefinedPlaces(userAddresses) {
+  if (!userAddresses.length) return [];
+
+  return userAddresses.map(address => ({
+    description: address.label,
+    formatted_address: address.address,
+    geometry: { location: { lat: address.latitude, lng: address.longitude } }
+  }));
+}
 
 class PlacesSearch extends Component {
   constructor(props) {
@@ -37,6 +46,8 @@ class PlacesSearch extends Component {
     this.allowedReverseGeocodingResults = ['street_address', 'route', 'intersection', 'neighborhood', 'sublocality',
                                             'locality', 'administrative_area_level_3', 'postal_code',
                                             'airport', 'parking' ];
+
+    this.predefinedPlaces = generatePredefinedPlaces(props.data.userAddresses);
   }
 
   onSelect = (data, details) => {
@@ -56,7 +67,7 @@ class PlacesSearch extends Component {
   renderRow = (rowData, details) => {
 
     if (rowData.isPredefinedPlace) {
-      return (rowData.formatted_address ? `${rowData.description}: ${rowData.formatted_address}` : rowData.description);
+      return (rowData.formatted_address ? `${rowData.description.toUpperCase()}: ${rowData.formatted_address}` : rowData.description);
     } else if (rowData.formatted_address) {
       return rowData.formatted_address;
     } else if (details && details.formatted_address) {
@@ -84,7 +95,7 @@ class PlacesSearch extends Component {
           nearbyPlacesAPI='GoogleReverseGeocoding' // Which API to use for nearBy search: GoogleReverseGeocoding or GooglePlacesSearch
           GoogleReverseGeocodingQuery={this.reverseGeocodingQuery}
           filterReverseGeocodingByTypes={this.allowedReverseGeocodingResults}
-          predefinedPlaces={[homePlace, workPlace]}
+          predefinedPlaces={this.predefinedPlaces}
 
           debounce={250}
           renderLeftButton={() => <Icon name="place" color="black" size={30} style={styles.placesIcon} />}
@@ -101,13 +112,14 @@ PlacesSearch.navigationOptions = () => ({
 
 PlacesSearch.propTypes = {
   navigation: PropTypes.shape({
-    navigate: PropTypes.func,
-    goBack: PropTypes.func,
     state: PropTypes.shape({
       params: PropTypes.shape({
         onPlaceSelect: PropTypes.func
       })
     })
+  }).isRequired,
+  data: PropTypes.shape({
+    userAddresses: PropTypes.arrayOf(PropTypes.shape({}))
   }).isRequired,
   goBack: PropTypes.func.isRequired,
   userPosition: PropTypes.shape({
