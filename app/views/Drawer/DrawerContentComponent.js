@@ -5,6 +5,8 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as Actions from '../../common/actions';
 import Logo from '../../images/logo.png';
+import parking from '../../images/parking-background.png';
+import styles from './DrawerStyles';
 
 function mapStateToProps(state) {
   return {
@@ -39,9 +41,13 @@ class DrawerContentComponent extends Component {
     return (
       <Drawer>
         <Drawer.Header >
-          <Drawer.Header.Account
-            avatar={<Avatar image={<Image source={Logo} />} />}
-          />
+          <Image source={parking} style={styles.headerBackground}>
+            <Avatar
+              image={<Image source={Logo} resizeMode="cover" style={styles.avatarContent} />}
+              style={{ container: styles.avatar, content: styles.avatarContent }}
+              size={80}
+            />
+          </Image>
         </Drawer.Header>
         <Drawer.Section
           divider
