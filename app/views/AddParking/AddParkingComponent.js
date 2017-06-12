@@ -126,7 +126,14 @@ class AddParking extends Component {
 AddParking.navigationOptions = ({ navigation: { state: { params } } }) => ({
   header: <ScreenHeader
     screenName="Add parking spot"
-    rightElement={<Button label="Add" onPress={params ? params.onAddClick : () => {}} />}
+    rightElement={
+      <Button
+        primary={false}
+        accent
+        label="Add"
+        onPress={params ? params.onAddClick : () => {}}
+      />
+    }
   />
 });
 
