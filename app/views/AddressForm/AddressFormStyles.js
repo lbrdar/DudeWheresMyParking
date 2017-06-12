@@ -42,7 +42,7 @@ export default StyleSheet.create({
     marginTop: 0
   },
   loader: {
-
+    marginRight: 5,
   },
   listView: {
     backgroundColor: 'white'
@@ -70,5 +70,13 @@ export default StyleSheet.create({
     paddingRight: 10,
     marginLeft: 15,
     fontSize: 16
+  },
+  errorMsg: {
+    color: 'red',
+    fontStyle: 'italic',
+    textAlign: 'center',
+    fontSize: 16,
+    fontWeight: 'bold',
+    margin: 10
   }
 });

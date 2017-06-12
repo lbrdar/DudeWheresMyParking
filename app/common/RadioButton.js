@@ -22,13 +22,14 @@ class RadioButton extends Component {  // eslint-disable-line react/prefer-state
   };
 
   render() {
-    const { checked, checkedIcon, uncheckedIcon, label, disabled, style, labelStyle } = this.props;
+    const { checked, checkedIcon, uncheckedIcon, label, disabled, style, labelStyle, iconStyle, iconContainerStyle } = this.props;
 
     return (
       <RippleFeedback onPress={this.onPress}>
         <View style={[styles.container, style]}>
           <IconToggle
             name={checked ? checkedIcon : uncheckedIcon}
+            style={{ container: iconContainerStyle, icon: iconStyle }}
             disabled={disabled}
             onPress={this.onPress}
           />
@@ -50,6 +51,8 @@ RadioButton.propTypes = {
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   style: PropTypes.number,
   labelStyle: PropTypes.number,
+  iconStyle: PropTypes.number,
+  iconContainerStyle: PropTypes.number,
   onPress: PropTypes.func.isRequired
 };
 
@@ -59,7 +62,9 @@ RadioButton.defaultProps = {
   checkedIcon: 'radio-button-checked',
   uncheckedIcon: 'radio-button-unchecked',
   style: null,
-  labelStyle: null
+  labelStyle: null,
+  iconStyle: null,
+  iconContainerStyle: null
 };
 
 export default RadioButton;

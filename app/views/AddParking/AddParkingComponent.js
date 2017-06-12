@@ -1,9 +1,10 @@
 import React, { Component, PropTypes } from 'react';
-import { Text, View, TextInput, KeyboardAvoidingView } from 'react-native';
+import { Text, View, TextInput, ScrollView } from 'react-native';
+import ModalDropdown from 'react-native-modal-dropdown';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Divider } from 'react-native-material-ui';
-import { ScreenHeader, RadioButton, Button } from '../../common';
+import { ScreenHeader, Button } from '../../common';
 import * as Actions from '../../common/actions';
 import SelectOnMap from './SelectOnMapComponent';
 import styles from './AddParkingStyles';
@@ -30,8 +31,8 @@ class AddParking extends Component {
       },
       typeId: null,
       price: '0',
-      keyboardOpen: false,
-      showMap: false
+      showMap: false,
+      error: ''
     }
   }
 
@@ -42,11 +43,15 @@ class AddParking extends Component {
 
   onAddClick = () => {
     const { position, typeId, price } = this.state;
-    this.props.addParkingSpot(position, typeId, price, this.props.auth.userId);
-    this.props.goBack();  // TODO: go back only on success, use spinner while waiting on response from API
+    if (this.isValid()) {
+      this.props.addParkingSpot(position, typeId, price, this.props.auth.userId);
+      this.props.goBack();
+    }
   };
 
   onMapSelect = (e) => this.setState({ position: e.nativeEvent.coordinate, showMap: false });
+
+  setType = (index) => this.setState({ typeId: this.props.data.types[index].id});
 
   handlePriceChange = (value) => {
     const clearValue = value && value.replace(',', '.');  // parseFloat accepts only dot notation, not comma
@@ -58,22 +63,24 @@ class AddParking extends Component {
     this.setState({ price: clearValue });
   };
 
-  renderType = (type) => {
-    return (
-      <View key={type.id}>
-        <RadioButton
-          label={type.label}
-          checked={this.state.typeId === type.id}
-          value={type.id}
-          onPress={() => this.setState({ typeId: type.id })}
-        />
-        <Divider />
-      </View>
-    );
+  isValid = () => {
+    const { position : { latitude, longitude }, typeId } = this.state;
+
+    if (!latitude || !longitude) {
+      this.setState({ error: 'Please provide position of parking spot'});
+      return false;
+    }
+
+    if (!typeId) {
+      this.setState({ error: 'Please select type of parking'});
+      return false;
+    }
+
+    return true;
   };
 
   render() {
-    const { position, price, keyboardOpen, showMap } = this.state;
+    const { position, price, showMap } = this.state;
     const { userPosition, data, settings } = this.props;
 
     if (showMap) {
@@ -81,16 +88,14 @@ class AddParking extends Component {
     }
 
     return (
-      <KeyboardAvoidingView
-        behavior='padding'
-        style={[styles.container, { justifyContent: keyboardOpen ? 'flex-end' : 'flex-start' }]}
-      >
-        <View>
-          <View style={styles.rowContainer}>
+      <ScrollView style={styles.container}>
+        { this.state.error ? <Text style={styles.errorMsg}>{this.state.error}</Text> : null }
+        <View style={styles.content}>
+          <View style={styles.row}>
             <Text style={styles.name}>Position</Text>
-            <View style={styles.columnContainer}>
-              <Text>Latitude: {position.latitude && position.latitude.toFixed(6)}</Text>
-              <Text>Longitude: {position.longitude && position.longitude.toFixed(6)}</Text>
+            <View>
+              <Text style={styles.position}>Latitude: {position.latitude && position.latitude.toFixed(6)}</Text>
+              <Text style={styles.position}>Longitude: {position.longitude && position.longitude.toFixed(6)}</Text>
             </View>
           </View>
           <View style={styles.buttonsContainer}>
@@ -98,28 +103,35 @@ class AddParking extends Component {
             <Button label='Select on map' onPress={() => this.setState({ showMap: true })} />
           </View>
         </View>
-        <View>
+        <Divider />
+        <View style={[styles.row, styles.content]}>
           <Text style={styles.name}>Type</Text>
-          <View style={styles.content}>
-            { data.types ? data.types.map(this.renderType) : null }
+          <View style={styles.value}>
+            <ModalDropdown
+              style={styles.dropdownContainer}
+              textStyle={styles.dropdownText}
+              dropdownTextStyle={styles.dropdownOpenText}
+              dropdownStyle={styles.dropdown}
+              options={data.types && data.types.length && data.types.map(type => type.label)}
+              onSelect={this.setType}
+            />
           </View>
         </View>
-        <View style={styles.rowContainer}>
+        <Divider />
+        <View style={[styles.row, styles.content]}>
           <Text style={styles.name}>Price per hour</Text>
-          <View style={styles.columnContainer}>
+          <View style={styles.value}>
             <TextInput
               keyboardType='numeric'
               placeholder='Price per hour'
               value={price}
               style={styles.priceInput}
               underlineColorAndroid="rgba(0,0,0,0)"
-              onFocus={() => this.setState({ keyboardOpen: true })}
-              onBlur={() => this.setState({ keyboardOpen: false })}
               onChangeText={this.handlePriceChange}
             />
           </View>
         </View>
-      </KeyboardAvoidingView>
+      </ScrollView>
     );
   }
 }
@@ -143,7 +155,7 @@ AddParking.propTypes = {
     userId: PropTypes.string.isRequired
   }).isRequired,
   data: PropTypes.shape({
-    types: PropTypes.arrayOf(PropTypes.shape({})).isRequired
+    types: PropTypes.arrayOf(PropTypes.shape({ id: PropTypes.number })).isRequired
   }).isRequired,
   settings: PropTypes.shape({
     mapType: PropTypes.string.isRequired

@@ -23,6 +23,7 @@ export default StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
     justifyContent: 'center',
     alignItems: 'center',
+
   },
   row: {
     flexDirection: 'row',
@@ -38,13 +39,21 @@ export default StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-end'
   },
+
   dropdownContainer: {
-    margin: 6,
-    padding: 6,
+    margin: 12,
+    padding: 8,
     width: '80%',
-    backgroundColor: COLOR.pink500
+    borderColor: COLOR.deepPurple700,
+    borderWidth: 1
   },
   dropdown: {
     width: '60%',
-  }
+  },
+  dropdownText: {
+    fontSize: 16
+  },
+  dropdownOpenText: {
+    fontSize: 14
+  },
 });

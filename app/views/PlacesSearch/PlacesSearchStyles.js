@@ -10,7 +10,10 @@ export default StyleSheet.create({
   },
   textInputContainer: {
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    backgroundColor: 'transparent',
+    borderTopColor: 'transparent',
+    borderBottomColor: 'transparent',
   },
   textInput: {
     fontSize: 16,
@@ -23,15 +26,16 @@ export default StyleSheet.create({
     paddingLeft: 10,
     paddingRight: 10,
     marginLeft: 15,
+    marginTop: 0
   },
   loader: {
-
+    marginRight: 5,
   },
   listView: {
-
+    backgroundColor: 'white'
   },
   predefinedPlacesDescription: {
-    color: '#1faadb',
+    color: 'black',
   },
   poweredContainer: {
 
@@ -40,6 +44,6 @@ export default StyleSheet.create({
 
   },
   placesIcon: {
-
+    paddingLeft: 5
   },
 });

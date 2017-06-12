@@ -43,19 +43,30 @@ export default StyleSheet.create({
     marginLeft: 15,
     fontSize: 16
   },
+  points: {
+    flex: 1,
+    height: 28,
+    paddingTop: 4.5,
+    paddingBottom: 4.5,
+    paddingLeft: 10,
+    paddingRight: 10,
+    marginLeft: 15,
+    fontSize: 16
+},
   listContainer: {
     padding: 4,
   },
   addressRow: {
-    padding: 4,
+    padding: 2,
     flexDirection: 'row',
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
-    maxWidth: '80%',
-    borderBottomColor: COLOR.grey400
+    borderTopColor: COLOR.grey400,
+    borderTopWidth: 2
   },
   address: {
-    paddingVertical: 6,
+    flex: 1,
+    paddingVertical: 4,
     flexDirection: 'row',
     alignItems: 'center',
   },
@@ -65,6 +76,6 @@ export default StyleSheet.create({
     padding: 4
   },
   addressValue: {
-
+flex: 1
   }
 });

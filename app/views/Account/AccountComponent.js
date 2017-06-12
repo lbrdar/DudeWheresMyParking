@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { View, Text, TextInput, ScrollView } from 'react-native';
+import { Divider } from 'react-native-material-ui';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { ScreenHeader, Button } from '../../common';
@@ -28,7 +29,7 @@ class Account extends Component {
     this.props.fetchPoints(this.props.auth.userId); // update points
   }
 
-  onAddAddress = () => this.props.navigate('AddressForm', { handleSave: this.saveAddress });
+  onAddAddress = () => this.props.navigate('AddressForm');
 
   setUsername = (value) => this.setState({ username: value });
 
@@ -40,10 +41,6 @@ class Account extends Component {
       alert('Username can\'t be empty!');   // eslint-disable-line no-undef
       this.setState({ username: this.props.auth.username });
     }
-  };
-
-  saveAddress = (position, address, label) => {
-    this.props.addUserAddress(position, address, label, this.props.auth.userId)
   };
 
   renderAddress = (address, key) => (
@@ -71,10 +68,12 @@ class Account extends Component {
             onEndEditing={this.saveUsername}
           />
         </View>
+        <Divider />
         <View style={styles.contentRow}>
           <Text style={styles.name}>Points</Text>
-          <Text style={styles.input}>{auth.points}</Text>
+          <Text style={styles.points}>{auth.points}</Text>
         </View>
+        <Divider />
         <View style={styles.content}>
           <View style={styles.row}>
             <Text style={styles.name}>Addresses</Text>
@@ -82,7 +81,7 @@ class Account extends Component {
           </View>
 
           <Text style={styles.description}>
-            These are your addresses that will be available for you to select when searching for parking spots.
+            These will be available for you to select when searching for parking spots.
           </Text>
           <View style={styles.listContainer}>
             { data.userAddresses.length ? data.userAddresses.map(this.renderAddress) : null }
@@ -108,8 +107,7 @@ Account.propTypes = {
   }).isRequired,
   navigate: PropTypes.func.isRequired,
   fetchPoints: PropTypes.func.isRequired,
-  setUsername: PropTypes.func.isRequired,
-  addUserAddress: PropTypes.func.isRequired
+  setUsername: PropTypes.func.isRequired
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Account);

@@ -89,6 +89,7 @@ class Settings extends Component {
               checked={selectedType === 'standard'}
               value="standard"
               style={styles.radioButton}
+              iconContainerStyle={styles.radioIconContainerStyle}
               onPress={selected => this.handleTypeChange(selected)}
             />
             <Divider />
@@ -97,6 +98,7 @@ class Settings extends Component {
               checked={selectedType === 'satellite'}
               value="satellite"
               style={styles.radioButton}
+              iconContainerStyle={styles.radioIconContainerStyle}
               onPress={selected => this.handleTypeChange(selected)}
             />
             <Divider />
@@ -105,6 +107,7 @@ class Settings extends Component {
               checked={selectedType === 'hybrid'}
               value="hybrid"
               style={styles.radioButton}
+              iconContainerStyle={styles.radioIconContainerStyle}
               onPress={selected => this.handleTypeChange(selected)}
             />
           </View>

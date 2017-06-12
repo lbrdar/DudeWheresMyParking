@@ -3,7 +3,7 @@ import { COLOR } from 'react-native-material-ui';
 export default {
   palette: {
     primaryColor: COLOR.green500,
-    accentColor: COLOR.pink500,
+    accentColor: COLOR.deepPurple700,
   },
   dialog: {
     container: {
@@ -13,7 +13,8 @@ export default {
       paddingHorizontal: 6,
       paddingBottom: 6,
       alignSelf: 'center',
-      bottom: '25%'
+      position: 'absolute',
+      top: '25%'
     }
   }
 };

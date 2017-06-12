@@ -11,7 +11,8 @@ import * as Actions from '../../common/actions';
 
 function mapStateToProps(state) {
   return {
-    userPosition: state.userPositionReducers
+    userPosition: state.userPositionReducers,
+    auth: state.authReducers
   }
 }
 function mapDispatchToProps(dispatch) {
@@ -26,7 +27,8 @@ class AddressForm extends Component {
       label: '',
       latitude: null,
       longitude: null,
-      address: null
+      address: null,
+      error: ''
     };
 
     this.placesQuery = {
@@ -48,8 +50,10 @@ class AddressForm extends Component {
 
   onAddClick = () => {
     const { latitude, longitude, address, label} = this.state;
-    this.props.navigation.state.params.handleSave({ latitude, longitude }, address, label );
-    this.props.goBack();
+    if (this.isValid()) {
+      this.props.addUserAddress({ latitude, longitude }, address, label, this.props.auth.userId);
+      this.props.goBack();
+    }
   };
 
   onSelect = (data, details) => {
@@ -60,6 +64,22 @@ class AddressForm extends Component {
   };
 
   setLabel = (label) => this.setState({ label });
+
+  isValid = () => {
+    const { latitude, longitude, address, label} = this.state;
+
+    if (!latitude || !longitude || !address) {
+      this.setState({ error: 'Please enter valid address'});
+      return false;
+    }
+
+    if (!label) {
+      this.setState({ error: 'Please enter label for this address'});
+      return false;
+    }
+
+    return true;
+  };
 
   renderRow = (rowData, details) => {
     if (rowData.isPredefinedPlace) {
@@ -77,6 +97,7 @@ class AddressForm extends Component {
   render() {
     return (
       <ScrollView style={styles.wrapper}>
+        <Text style={styles.errorMsg}>{this.state.error}</Text>
         <View style={styles.contentRow}>
           <Text style={styles.name}>Label</Text>
           <TextInput
@@ -102,7 +123,7 @@ class AddressForm extends Component {
             nearbyPlacesAPI='GoogleReverseGeocoding' // Which API to use for nearBy search: GoogleReverseGeocoding or GooglePlacesSearch
             GoogleReverseGeocodingQuery={this.reverseGeocodingQuery}
             filterReverseGeocodingByTypes={this.allowedReverseGeocodingResults}
-            debounce={200}
+            debounce={250}
             renderLeftButton={() => <Icon name="place" color="black" size={30} style={styles.placesIcon} />}
             styles={styles}
           />
@@ -128,22 +149,23 @@ AddressForm.navigationOptions = ({ navigation: { state: { params } } }) => ({
 
 AddressForm.propTypes = {
   navigation: PropTypes.shape({
-    navigate: PropTypes.func,
-    goBack: PropTypes.func,
     state: PropTypes.shape({
       params: PropTypes.shape({
-        onAddClick: PropTypes.func,
-        handleSave: PropTypes.func
+        onAddClick: PropTypes.func
       }),
       key: PropTypes.string.isRequired
     })
   }).isRequired,
   goBack: PropTypes.func.isRequired,
   setParams: PropTypes.func.isRequired,
+  addUserAddress: PropTypes.func.isRequired,
   userPosition: PropTypes.shape({
     latitude: PropTypes.number.isRequired,
     longitude: PropTypes.number.isRequired
-  }).isRequired
+  }).isRequired,
+  auth: PropTypes.shape({
+    userId: PropTypes.string.isRequired
+  }).isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddressForm);

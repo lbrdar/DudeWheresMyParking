@@ -65,6 +65,8 @@ class MarkerCalloutModal extends React.Component {
             <Text>How long do you plan to be parked on this spot:</Text>
             <ModalDropdown
               style={styles.dropdownContainer}
+              textStyle={styles.dropdownText}
+              dropdownTextStyle={styles.dropdownOpenText}
               dropdownStyle={styles.dropdown}
               options={this.generateOptions()}
               onSelect={this.takeParking}

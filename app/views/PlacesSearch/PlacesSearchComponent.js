@@ -86,7 +86,7 @@ class PlacesSearch extends Component {
           filterReverseGeocodingByTypes={this.allowedReverseGeocodingResults}
           predefinedPlaces={[homePlace, workPlace]}
 
-          debounce={200}
+          debounce={250}
           renderLeftButton={() => <Icon name="place" color="black" size={30} style={styles.placesIcon} />}
           styles={styles}
         />

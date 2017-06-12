@@ -52,7 +52,7 @@ export default StyleSheet.create({
     paddingBottom: 4.5,
     paddingLeft: 10,
     paddingRight: 10,
-    marginLeft: 15,
+    marginHorizontal: 15,
     fontSize: 16
   },
   unitLabel: {
@@ -67,6 +67,9 @@ export default StyleSheet.create({
   radioButton: {
     padding: 0,
     margin: 0
+  },
+  radioIconContainerStyle: {
+    height: 40
   },
   dropDownLabel: {
     paddingHorizontal: 8,
