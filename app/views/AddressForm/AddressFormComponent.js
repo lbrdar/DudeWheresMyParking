@@ -92,7 +92,6 @@ class AddressForm extends Component {
           <GooglePlacesAutocomplete
             placeholder='Enter full address'
             minLength={2} // minimum length of text to search
-            autoFocus
             listViewDisplayed // list predefined locations right away (if false, will render only when search is focused)
             fetchDetails
             renderDescription={this.renderRow}
