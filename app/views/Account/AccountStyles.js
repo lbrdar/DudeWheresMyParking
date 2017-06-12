@@ -32,7 +32,16 @@ export default StyleSheet.create({
     textAlign: 'justify'
   },
   input: {
-    flex: 1
+    flex: 1,
+    backgroundColor: '#FFFFFF',
+    height: 28,
+    borderRadius: 5,
+    paddingTop: 4.5,
+    paddingBottom: 4.5,
+    paddingLeft: 10,
+    paddingRight: 10,
+    marginLeft: 15,
+    fontSize: 16
   },
   listContainer: {
     padding: 4,

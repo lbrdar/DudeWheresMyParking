@@ -30,7 +30,16 @@ export default StyleSheet.create({
   },
 
   priceInput: {
-    paddingTop: 0
+    width: '80%',
+    backgroundColor: '#FFFFFF',
+    height: 28,
+    borderRadius: 5,
+    paddingTop: 4.5,
+    paddingBottom: 4.5,
+    paddingLeft: 10,
+    paddingRight: 10,
+    marginLeft: 15,
+    fontSize: 16
   },
 
   mapContainer: {

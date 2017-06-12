@@ -112,6 +112,7 @@ class AddParking extends Component {
               placeholder='Price per hour'
               value={price}
               style={styles.priceInput}
+              underlineColorAndroid="rgba(0,0,0,0)"
               onFocus={() => this.setState({ keyboardOpen: true })}
               onBlur={() => this.setState({ keyboardOpen: false })}
               onChangeText={this.handlePriceChange}

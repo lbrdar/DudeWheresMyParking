@@ -20,7 +20,8 @@ class Register extends Component {
       username: '',
       password: '',
       password2: '',
-      loading: false
+      loading: false,
+      error: ''
     }
   }
 
@@ -38,14 +39,20 @@ class Register extends Component {
   isValid = () => {
     const { username, password, password2 } = this.state;
 
-    if (!username || !password || !password2) return false; // TODO: change style of textfield (bottomBorder: red)
-    if (password !== password2) return false;               // TODO: add all to snackbar info
+    if (!username || !password || !password2) {
+      this.setState({ error: 'All fields are required' });
+      return false;
+    }
+    if (password !== password2) {
+      this.setState({ error: 'Passwords don\'t match' });
+      return false;
+    }
 
     return true;
   };
 
   render() {
-    const { username, password, password2, loading } = this.state;
+    const { username, password, password2, loading, error } = this.state;
 
     if (loading) return <Loading />;
 
@@ -62,6 +69,7 @@ class Register extends Component {
             autoCapitalize="none"
             autoCorrect={false}
             style={styles.input}
+            underlineColorAndroid="rgba(0,0,0,0)"
             placeholder="Username"
             value={username}
             onChangeText={this.setUsername}
@@ -71,6 +79,7 @@ class Register extends Component {
             autoCorrect={false}
             secureTextEntry
             style={styles.input}
+            underlineColorAndroid="rgba(0,0,0,0)"
             placeholder="Password"
             value={password}
             onChangeText={this.setPassword}
@@ -80,11 +89,13 @@ class Register extends Component {
             autoCorrect={false}
             secureTextEntry
             style={styles.input}
+            underlineColorAndroid="rgba(0,0,0,0)"
             placeholder="Repeat password"
             value={password2}
             onChangeText={this.setPassword2}
           />
-          <Button label='Register' onPress={this.onRegisterPress} />
+          <Text style={styles.errorMsg}>{error}</Text>
+          <Button label='Register' onPress={this.onRegisterPress} style={{ container: styles.button }} />
         </View>
       </KeyboardAvoidingView>
     );

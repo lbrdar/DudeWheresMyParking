@@ -14,7 +14,15 @@ export default StyleSheet.create({
   },
   textInput: {
     fontSize: 16,
-    padding: 5
+    width: '80%',
+    backgroundColor: '#FFFFFF',
+    height: 28,
+    borderRadius: 5,
+    paddingTop: 4.5,
+    paddingBottom: 4.5,
+    paddingLeft: 10,
+    paddingRight: 10,
+    marginLeft: 15,
   },
   loader: {
 

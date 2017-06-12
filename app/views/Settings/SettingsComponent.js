@@ -120,6 +120,7 @@ class Settings extends Component {
               keyboardType='numeric'
               maxLength={3}
               style={styles.radiusInput}
+              underlineColorAndroid="rgba(0,0,0,0)"
               value={radius.toString()}
               onChangeText={this.handleRadiusChange}
               onEndEditing={this.handleRadiusSet}

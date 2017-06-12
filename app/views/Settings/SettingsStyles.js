@@ -44,7 +44,16 @@ export default StyleSheet.create({
     justifyContent: 'center'
   },
   radiusInput: {
-    flex: 1
+    flex: 1,
+    backgroundColor: '#FFFFFF',
+    height: 28,
+    borderRadius: 5,
+    paddingTop: 4.5,
+    paddingBottom: 4.5,
+    paddingLeft: 10,
+    paddingRight: 10,
+    marginLeft: 15,
+    fontSize: 16
   },
   unitLabel: {
     flex: 2

@@ -20,7 +20,8 @@ class Login extends Component {
     super(props);
     this.state = {
       password: '',
-      loading: false
+      loading: false,
+      error: ''
     }
   }
 
@@ -36,13 +37,16 @@ class Login extends Component {
   isValid = () => {
     const { password } = this.state;
 
-    if (password === '') return false; // TODO: change style of textfield, add to snackbar info
+    if (password === '') {
+      this.setState({ error: 'Please enter password' });
+      return false;
+    }
 
     return true;
   };
 
   render() {
-    const { password, loading } = this.state;
+    const { password, loading, error } = this.state;
 
     if (loading) return <Loading />;
 
@@ -60,11 +64,13 @@ class Login extends Component {
             autoCorrect={false}
             secureTextEntry
             style={styles.input}
+            underlineColorAndroid="rgba(0,0,0,0)"
             placeholder="Password"
             value={password}
             onChangeText={this.setPassword}
           />
-          <Button label='Login' onPress={this.onLoginPress} />
+          <Text style={styles.errorMsg}>{error}</Text>
+          <Button label='Login' onPress={this.onLoginPress} style={{ container: styles.button }} />
         </View>
       </KeyboardAvoidingView>
     );

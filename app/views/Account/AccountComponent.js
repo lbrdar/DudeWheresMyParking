@@ -65,6 +65,7 @@ class Account extends Component {
           <Text style={styles.name}>Username</Text>
           <TextInput
             style={styles.input}
+            underlineColorAndroid="rgba(0,0,0,0)"
             value={username}
             onChangeText={this.setUsername}
             onEndEditing={this.saveUsername}
