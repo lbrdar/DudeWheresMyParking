@@ -25,7 +25,17 @@ class DrawerContentComponent extends Component {
 
     closeDrawer();
     if (activeRoute !== routeName) {
-      navigate(routeName);
+      if (routeName === 'PlacesSearch') { // this route requires params from Map
+        // find Map screen that was last active and take its params
+        for (let i = navigation.routes.length - 1; i >= 0; i--) {
+          const route = navigation.routes[i];
+          if (route.routeName === 'Map') {
+            navigate(routeName, { onPlaceSelect:  route.params && route.params.onPlaceSelect });
+          }
+        }
+      } else {
+        navigate(routeName);
+      }
     }
   };
 
