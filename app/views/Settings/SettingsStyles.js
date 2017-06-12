@@ -1,5 +1,4 @@
 import { StyleSheet } from 'react-native';
-import { COLOR } from 'react-native-material-ui';
 
 export default StyleSheet.create({
   container: {
@@ -76,13 +75,19 @@ export default StyleSheet.create({
     width: '50%'
   },
   dropdownContainer: {
-    margin: 6,
-    padding: 6,
+    margin: 8,
+    padding: 8,
     width: '50%',
-    borderBottomColor: COLOR.black,
-    backgroundColor: COLOR.grey50
+    borderRadius: 5,
+    backgroundColor: '#FFFFFF'
   },
   dropdown: {
     width: '60%',
-  }
+  },
+  dropdownText: {
+    fontSize: 16
+  },
+  dropdownOpenText: {
+    fontSize: 14
+  },
 });
