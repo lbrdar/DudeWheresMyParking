@@ -63,6 +63,12 @@ class Map extends React.Component {
         err => console.log('Error in navigator: ', err),    // TODO: add denied location handling
         { enableHighAccuracy: true, distanceFilter: 1 }
       );
+    } else {
+      navigator.geolocation.getCurrentPosition(
+        this.updateUserPosition,
+        err => console.log('Error in navigator: ', err),    // TODO: add denied location handling
+        { enableHighAccuracy: true }
+      );
     }
     if (this.props.settings.fetchPeriodically) {
       this.timerID = this.setInterval(() => this.getParkingSpots(), this.props.settings.fetchingPeriod); // auto refresh
