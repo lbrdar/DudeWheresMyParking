@@ -162,7 +162,7 @@ class Map extends React.Component {
   };
 
   determineMarkerColor = (created, isTaken) => {
-    const deltaMs = moment() - moment(created);
+    const deltaMs = moment.utc() - moment.utc(created);
     if (isTaken) {
       return 'blue';
     } else if (deltaMs < 15*60*1000) { // 15 min
