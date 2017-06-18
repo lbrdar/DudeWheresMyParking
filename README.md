@@ -17,4 +17,13 @@ Be a good guy / girl, mark parking spots, collect points and get rewards!  :inno
 
 ## Development stack
 
-* **React Native** (0.43) ==> [Learn more](http://facebook.github.io/react-native/releases/0.43/ "React Native documentation")
+Main packages used in development:
+* [**React Native** (0.42)](http://facebook.github.io/react-native/releases/0.42/ "Documentation")
+* [**React Native Maps**](https://github.com/airbnb/react-native-maps "Documentation")
+* [**React Native Google Places Autocomplete**](https://github.com/FaridSafi/react-native-google-places-autocomplete "Documentation")
+* [**React Native Material UI**](https://github.com/xotahal/react-native-material-ui "Documentation")
+* [**React Navigation**](https://reactnavigation.org/ "Documentation")
+* [**Redux**](http://redux.js.org/ "Documentation")
+* [**Eslint**](http://eslint.org/ "Documentation")
+
+For other packages used, check out package.json in project files.
