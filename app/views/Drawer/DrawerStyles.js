@@ -17,6 +17,8 @@ export default {
   headerBackground: {
     flex: 1,
     resizeMode: 'cover',
+    width: null,
+    height: null
   },
   avatar: {
     margin: 20,

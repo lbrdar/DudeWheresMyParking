@@ -51,7 +51,7 @@ class DrawerContentComponent extends Component {
     return (
       <Drawer>
         <Drawer.Header >
-          <Image source={parking} style={styles.headerBackground}>
+          <Image source={parking} style={styles.headerBackground} resizeMode="cover">
             <Avatar
               image={<Image source={Logo} resizeMode="cover" style={styles.avatarContent} />}
               style={{ container: styles.avatar, content: styles.avatarContent }}
